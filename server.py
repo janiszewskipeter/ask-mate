@@ -16,10 +16,11 @@ def question():
 
 @app.route("/add-question>")
 def add_question():
-    data =  # read data function
+
     return render_template('add_question.html', data=data)
 
 @app.route("/question/<question_id>/new-answer")
+
 def add_answer():
     data =  # read data function
     return render_template('add_answer.html', data=data)
