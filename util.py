@@ -6,3 +6,5 @@ Helper functions which can be called from any other layer.
 def id_generator():
 
 def sort():
+
+def add_headers():

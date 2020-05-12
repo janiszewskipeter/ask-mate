@@ -14,9 +14,14 @@ def question():
     data =  # read data function
     return render_template('question.html', data=data)
 
-@app.route("/add-question>")
+@app.route("/add-question>", methods=['POST', 'GET'])
 def add_question():
-    data =  # read data function
+
+    if request.method == 'POST'
+        data =  # read data function
+
+        return render_template('list.html', data=data)
+
     return render_template('add_question.html', data=data)
 
 @app.route("/question/<question_id>/new-answer")
@@ -36,4 +41,8 @@ def edit():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(
+        host='0.0.0.0',
+        port=8000,
+        debug=True,
+    )
