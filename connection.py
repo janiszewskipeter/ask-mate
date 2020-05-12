@@ -9,13 +9,22 @@ but later on we'll change this to SQL database.
 
 import csv
 
-ANS_FILENAME = answer.csv
-QUE_FILENAME = question.csv
+# ANS_FILENAME = answer.csv
+# QUE_FILENAME = question.csv
 
 
-get_data(AND_FILENAME, QUE_FILENAME):
+get_data(FILENAME, PATH):
+    with open(PATH + FILENAME, 'r') as f:
+        data = csv.reader(f)
+        list_of_rows = list(data)
 
-
+    return list_of_rows
 
 
 save_data(ANS_FILENAME, QUE_FILENAME)
+
+def get_all_user_story(PATH,FILENAME, data):
+    with open(PATH+FILENAME, 'w', newline='') as f:
+        for row in data:
+            writer.writerow(row)
+

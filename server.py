@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
+PATH = app.root_path
 
 @app.route("/")
 @app.route("/list")
