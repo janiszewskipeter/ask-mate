@@ -1,22 +1,15 @@
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
-{#    <head>#}
-{#        <meta charset="utf-8">#}
-{#        <title>Question page</title>#}
-{#    </head>#}
-{#    <body>#}
-{#        <h1>Question form</h1>#}
-{##}
-{#        <!-- This form will send it's data as a POST request#}
-{#            to 'http://localhost:5000/note' route when#}
-{#            the user submits the form -->#}
-{#        <form action="/list" method="post">#}
-{#            <!-- Label for the textarea to help the user understand what it is for. -->#}
-{#            <label for="question-input">Your Question:</label>#}
-{#            <textarea id="question-input" name="question" rows="4" cols="60"></textarea>#}
-{##}
-{#            <!-- Let's allow the user to submit the form. -->#}
-{#            <button type="submit">Save</button>#}
-{#        </form>#}
-{#    </body>#}
-{#</html#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Question</title>
+</head>
+<body>
+<h2>{{ question }}</h2>
+<p>{{ description }}</p>
+<form>
+    <button formaction="/question/<question_id>/new-answer">Add an answer</button>
+</form>
+
+</body>
+</html>
