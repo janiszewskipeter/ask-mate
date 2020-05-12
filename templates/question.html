@@ -7,7 +7,9 @@
 <body>
 <h2>{{ question }}</h2>
 <p>{{ description }}</p>
-<button type="button">Add an answer</button>
+<form>
+    <button formaction="/question/<question_id>/new-answer">Add an answer</button>
+</form>
 
 </body>
 </html>
