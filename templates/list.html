@@ -8,8 +8,8 @@
     <table>
         {% for row in data %}
             {% for cell in row %}
-              {% if cell.index == -3 %} # You can also use loop.index0 for 0-based indexing
-                <td><a href="/question/<question_id>">{{ cell }}</a></td>
+              {% if row.index(cell) == 2 %}
+                <td><a href="/question/{{ row[0] }}">{{ cell }}</a></td>
               {% else %}
                 <td>{{ cell }}</td>
               {% endif %}

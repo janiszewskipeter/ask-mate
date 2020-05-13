@@ -5,11 +5,14 @@
     <title>Question</title>
 </head>
 <body>
-<h2>{{ question[-3] }}</h2>
-<p>{{ question[-2] }}</p>
+<h2>{{ question[-2] }}</h2>
+<p>{{ question[-1] }}</p>
 <form>
-    <button formaction="/question/OzHSf/new-answer">Add an answer</button>
+    <button formaction="/question/{{ question[0] }}/new-answer">Add an answer</button>
 </form>
+
+<h2>Answers:</h2>
+<p>{{ answer }}</p>
 
 </body>
 </html>
