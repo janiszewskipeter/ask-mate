@@ -13,20 +13,17 @@ import csv
 # QUE_FILENAME = question.csv
 
 
-get_data(FILENAME, PATH):
-
-    with open(PATH + FILENAME, 'r') as f:
+def get_data(FILENAME, PATH):
+    with open(PATH +'/sample_data/'+FILENAME, 'r') as f:
         data = csv.reader(f)
         list_of_rows = list(data)
-        list_of_rows.reverse()
     return list_of_rows
 
-save_data(ANS_FILENAME, QUE_FILENAME)
-
-def get_all_user_story(PATH,FILENAME, data):
-    data.reverse()
-    with open(PATH+FILENAME, 'w', newline='') as f:
+def save_data(PATH,FILENAME, data):
+    with open(PATH +'/sample_data/'+ FILENAME, 'w', newline='') as f:
         writer = csv.writer(f)
         for row in data:
             writer.writerow(row)
+
+
 
