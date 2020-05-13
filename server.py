@@ -14,15 +14,22 @@ def list():
 
 
 @app.route("/question/<question_id>")
-def question():
+def question(question_id):
     data = connection.get_data('question.csv', PATH)
-    return render_template('question.html', data=data)
+    question = []
+    for i in data:
+        if question_id == i[0]:
+            question.append(str(i))
+    #question = [i for i in data if question_id == i[0]]
+    print(question)
+    return render_template('question.html', question=question)
+
 
 
 @app.route("/add_question", methods=['POST', 'GET'])
 def add_question():
     if request.method == 'POST':
-        # id = util.id_generator()
+        id = util.id_generator()
         submission_time = str(util.get_time())
         # view_number = request.form[]
         # vote_number = request.form[]
@@ -30,7 +37,7 @@ def add_question():
         message = request.form['question']
         # image = request.form[]
         #
-        data_to_save = [submission_time,title,message]
+        data_to_save = [id, submission_time,title,message]
         connection.save_data(PATH, 'question.csv', data_to_save)
         data = connection.get_data('question.csv', PATH)
         return render_template('list.html', data=data)
@@ -59,7 +66,7 @@ def edit():
 if __name__ == "__main__":
     app.run(
         host='0.0.0.0',
-        port=8000,
+        port=5050,
         debug=True,
     )
 #id,submission_time,vote_number,question_id,message,image

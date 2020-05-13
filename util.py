@@ -1,4 +1,6 @@
 import time
+import string
+import random
 
 '''
 Helper functions which can be called from any other layer.
@@ -6,7 +8,14 @@ Helper functions which can be called from any other layer.
 '''
 
 def id_generator():
-    pass
+    id = []
+    for i in range(5):
+        letter = random.choice(string.ascii_letters)
+        id.append(letter)
+    id = ''.join(id)
+
+    return id
+
 def get_time():
     named_tuple = time.localtime()
     current_time= time.strftime("%m/%d/%Y, %H:%M:%S", named_tuple)
