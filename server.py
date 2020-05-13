@@ -29,14 +29,14 @@ def question(question_id):
 def add_question():
     if request.method == 'POST':
         id = util.id_generator()
-        submission_time = str(util.get_time())
+        submission_time = util.get_time()
         # view_number = request.form[]
         # vote_number = request.form[]
         title = request.form['question_title']
         message = request.form['question']
         # image = request.form[]
-        #
-        data_to_save = [id, submission_time,title,message]
+
+        data_to_save = [submission_time,title,message, id, "image"]
         connection.save_data(PATH, 'question.csv', data_to_save)
         data = connection.get_data('question.csv', PATH)
         return render_template('list.html', data=data)
