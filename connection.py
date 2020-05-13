@@ -19,11 +19,13 @@ def get_data(FILENAME, PATH):
         list_of_rows = list(data)
     return list_of_rows
 
+
+
 def save_data(PATH,FILENAME, data):
     with open(PATH +'/sample_data/'+ FILENAME, 'w+', newline='') as f:
         writer = csv.writer(f)
-        for row in data:
-            writer.writerow(data)
+        writer.writerow(data)
+
 
 
 

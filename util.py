@@ -18,9 +18,7 @@ def id_generator():
 
 def get_time():
     named_tuple = time.localtime()
-    current_time= time.strftime("%m/%d/%Y, %H:%M:%S", named_tuple)
-
-
+    current_time= time.strftime("%H:%M:%S", named_tuple)
     return current_time
 def sort():
     pass
