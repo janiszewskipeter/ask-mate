@@ -6,9 +6,11 @@
     </head>
     <body>
         <h1>Question form</h1>
-        <form action="/list" method="post">
+        <form action="/add_question" method="post">
             <label for="question-input">Your Question:</label>
+            <textarea id="question_title_input" name="question_title" rows="2" cols="20"></textarea>
             <textarea id="question-input" name="question" rows="4" cols="60"></textarea>
+
             <button type="submit">Save</button>
         </form>
     </body>

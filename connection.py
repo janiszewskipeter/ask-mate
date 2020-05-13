@@ -20,7 +20,7 @@ def get_data(FILENAME, PATH):
     return list_of_rows
 
 def save_data(PATH,FILENAME, data):
-    with open(PATH +'/sample_data/'+ FILENAME, 'w', newline='') as f:
+    with open(PATH +'/sample_data/'+ FILENAME, 'w+', newline='') as f:
         writer = csv.writer(f)
         for row in data:
             writer.writerow(row)
