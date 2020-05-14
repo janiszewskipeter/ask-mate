@@ -22,7 +22,7 @@ def get_data(FILENAME, PATH):
 
 
 def save_data(PATH,FILENAME, data):
-    with open(PATH +'/sample_data/'+ FILENAME, 'w+', newline='') as f:
+    with open(PATH +'/sample_data/'+ FILENAME, 'a', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(data)
 

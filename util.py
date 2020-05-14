@@ -20,7 +20,9 @@ def get_time():
     named_tuple = time.localtime()
     current_time= time.strftime("%H:%M:%S", named_tuple)
     return current_time
+
 def sort():
     pass
+
 def add_headers():
     pass

@@ -5,14 +5,21 @@
     <title>Question</title>
 </head>
 <body>
-<h2>{{ question[-2] }}</h2>
-<p>{{ question[-1] }}</p>
+<h2>{{ question[-3] }}</h2>
+<p>{{ question[-2] }}</p>
 <form>
-    <button formaction="/question/{{ question[0] }}/new-answer">Add an answer</button>
+    <button formaction='{{ url_for('add_answer', question_id=question_id) }}'>Add an answer</button>
 </form>
 
 <h2>Answers:</h2>
-<p>{{ answer }}</p>
+
+ {% for row in answer %}
+            {% for cell in row %}
+              {% if row.index(cell) == 1 %}
+                <p>{{ cell }}</p>
+              {% endif %}
+            {% endfor %}
+        {% endfor %}
 
 </body>
 </html>
