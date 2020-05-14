@@ -6,12 +6,20 @@
     </head>
     <body>
         <h1>Question form</h1>
-        <form action="/add_question" method="post">
-            <label for="question-input">Your Question:</label>
-            <textarea id="question_title_input" name="question_title" rows="2" cols="20"></textarea>
-            <textarea id="question-input" name="question" rows="4" cols="60"></textarea>
-
-            <button type="submit">Save</button>
-        </form>
+        {% if edit %}
+            <form action="{{ url_for("edit", question_id=question_id)}}" method="post">
+                <label for="question-input">Your Question:</label>
+                <textarea id="question_title_input" name="question_title" rows="2" cols="20">{{ question[TITLE] }}</textarea>
+                <textarea id="question-input" name="question" rows="4" cols="60">{{ question[CONTENT] }}</textarea>
+                <button type="submit">Save</button>
+            </form>
+        {% else %}
+            <form action="/add_question" method="post">
+                <label for="question-input">Your Question:</label>
+                <textarea id="question_title_input" name="question_title" rows="2" cols="20"></textarea>
+                <textarea id="question-input" name="question" rows="4" cols="60"></textarea>
+                <button type="submit">Save</button>
+            </form>
+            {% endif %}
     </body>
 </html>
