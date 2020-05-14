@@ -1,3 +1,4 @@
+from flask import Flask, render_template, request, redirect, url_for
 import time
 import string
 import random
@@ -18,11 +19,15 @@ def id_generator():
 
 def get_time():
     named_tuple = time.localtime()
-    current_time= time.strftime("%H:%M:%S", named_tuple)
+    current_time= time.strftime("%H:%M", named_tuple)
     return current_time
 
 def sort():
+    questions = connection.get_data('question.csv', PATH)
+    TIME_INDEX = 1
+    sorted_question = sorted(questions, key=lambda questions: questions[TIME_INDEX])
     pass
 
+    return sorted_question
 def add_headers():
     pass
