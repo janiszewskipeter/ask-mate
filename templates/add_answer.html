@@ -2,16 +2,18 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>New Answer page</title>
+        <title>New Answer</title>
+        <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
     </head>
     <body>
-        <h1>Answer form</h1>
+    <a href="/"><h1>� Ask Mate</h1></a><br>
+        <h2>Answer form</h2>
         <form action="{{ url_for("add_answer", question_id=question_id) }}" method="POST">
             <!-- Label for the textarea to help the user understand what it is for. -->
-            <label for="answer-input">New answer:</label>
-            <textarea id="answer-input" name="answer" rows="4" cols="60"></textarea>
+            <label for="answer-input">New answer:</label><br>
+            <textarea id="answer-input" name="answer" rows="10" cols="60"></textarea><br><br><br>
 
-            <button type="submit">Save</button>
+            <button class="button" type="submit">Save</button>
         </form>
     </body>
 </html>

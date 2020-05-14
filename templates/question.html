@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Question</title>
+    <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
 </head>
 <body>
+<a href="/"><h1>� Ask Mate</h1></a><br>
 <h2>{{ question[-3] }}</h2>
 <p>{{ question[-2] }}</p>
 <form>
-    <button formaction='{{ url_for('add_answer', question_id=question_id) }}'>Add an answer</button>
+    <button class="button" formaction='{{ url_for('add_answer', question_id=question_id) }}'>Add an answer</button>
 </form>
 <form>
-    <button formaction='{{ url_for('edit', question_id=question_id) }}'>Edit question</button>
+    <button class="button" formaction='{{ url_for('edit', question_id=question_id) }}'>Edit question</button>
 </form>
-
+<br><br><br><br>
 <h2>Answers:</h2>
 
  {% for row in answer %}

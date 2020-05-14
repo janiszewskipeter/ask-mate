@@ -47,7 +47,7 @@ def add_question():
 
         connection.save_data(PATH, 'question.csv', data_to_save, 'a')
         data = connection.get_data('question.csv', PATH)
-        return render_template('list.html', data=data)
+        return render_template('list.html', data=data, TITLE=TITLE, ID=ID )
 
     return render_template('add_question.html')
 
