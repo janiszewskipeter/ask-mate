@@ -7,13 +7,15 @@
 <body>
     <table>
         {% for row in data %}
+            <tr>
             {% for cell in row %}
-              {% if row.index(cell) == 2 %}
-                <td><a href="/question/{{ row[0] }}">{{ cell }}</a></td>
+              {% if row.index(cell) == TITLE %}
+                <td><a href="/question/{{ row[ID] }}">{{ cell }}</a></td>
               {% else %}
                 <td>{{ cell }}</td>
               {% endif %}
             {% endfor %}
+            </tr>
         {% endfor %}
     </table>
 <a href="/add_question">Add question</a>

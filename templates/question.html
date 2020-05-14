@@ -10,6 +10,9 @@
 <form>
     <button formaction='{{ url_for('add_answer', question_id=question_id) }}'>Add an answer</button>
 </form>
+<form>
+    <button formaction='{{ url_for('edit', question_id=question_id) }}'>Edit question</button>
+</form>
 
 <h2>Answers:</h2>
 

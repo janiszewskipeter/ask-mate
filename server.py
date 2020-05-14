@@ -5,13 +5,18 @@ import util
 app = Flask(__name__)
 PATH = app.root_path
 
+ID = 0
+TIME = 1
+TITLE = 2
+CONTENT = -2
+
 
 @app.route("/")
 @app.route("/list")
 def list():
     data = connection.get_data('question.csv', PATH)
 
-    return render_template('list.html', data=data)
+    return render_template('list.html', data=data, TITLE=TITLE, ID=ID)
 
 
 @app.route("/question/<question_id>", methods=['POST', 'GET'])
@@ -22,7 +27,6 @@ def question(question_id):
         if question_id == q[0]:
             question = q
     answer= [a for a in answers if a[0] == question_id]
-    #question = [i for i in data if question_id == i[0]]
     return render_template('question.html', question=question, question_id=question_id, answer=answer)
 
 
@@ -36,9 +40,12 @@ def add_question():
         title = request.form['question_title']
         message = request.form['question']
         # image = request.form[]
-
+        questions = connection.get_data('question.csv', PATH)
         data_to_save = [id,submission_time,title,message,"image"]
-        connection.save_data(PATH, 'question.csv', data_to_save)
+
+        # question_to_save = questions.append(data_to_save)
+
+        connection.save_data(PATH, 'question.csv', data_to_save, 'a')
         data = connection.get_data('question.csv', PATH)
         return render_template('list.html', data=data)
 
@@ -53,7 +60,10 @@ def add_answer(question_id):
         question = [q for q in question_data if question_data[0] == question_id]
         answer = request.form['answer']
         answer_to_save = [question_id, answer]
-        connection.save_data(PATH, 'answer.csv', answer_to_save)
+
+        answers.append(answer_to_save)
+        connection.save_data(PATH, 'answer.csv', answer_to_save, 'a')
+
         return redirect(url_for('question', question_id=question_id ))
     else:
         answers = connection.get_data('answer.csv', PATH)
@@ -68,10 +78,30 @@ def delete():
     return render_template('list.html', data=data)
 
 
-@app.route("/question/<question_id>/edit")
-def edit():
-    data = connection.get_data('question.csv', PATH)
-    return render_template('add_question.html', data=data)
+@app.route("/question/<question_id>/edit", methods=['POST', 'GET'])
+def edit(question_id):
+    edit = True
+    if request.method == 'POST':
+        id = question_id
+        # view_number = request.form[]
+        # vote_number = request.form[]
+        title = request.form['question_title']
+        message = request.form['question']
+        # image = request.form[]
+
+        questions = connection.get_data('question.csv', PATH)
+        index = questions.index([q for q in questions if q[ID] == question_id][0])
+        submission_time = questions[index][TIME]
+        questions[index] = [id, submission_time, title, message, "image"]
+
+        connection.save_edited_data(PATH, 'question.csv', questions,'w')
+
+        return redirect(url_for('question', question_id=question_id ))
+    else:
+        questions= connection.get_data('question.csv', PATH)
+        question = [q for q in questions if q[0] == question_id][0]
+
+        return render_template('add_question.html', edit=edit, question_id=question_id, question=question, TITLE=TITLE, CONTENT=CONTENT)
 
 
 if __name__ == "__main__":
