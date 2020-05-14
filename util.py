@@ -1,7 +1,10 @@
+from flask import Flask, render_template, request, redirect, url_for
 import time
 import string
 import random
-
+import connection
+app = Flask(__name__)
+PATH = app.root_path
 '''
 Helper functions which can be called from any other layer.
 (but mainly from the business logic layer)
@@ -18,11 +21,14 @@ def id_generator():
 
 def get_time():
     named_tuple = time.localtime()
-    current_time= time.strftime("%H:%M:%S", named_tuple)
+    current_time= time.strftime("%H:%M", named_tuple)
     return current_time
 
 def sort():
-    pass
+    questions = connection.get_data('question.csv', PATH)
+    TIME_INDEX = 1
+    sorted_question = sorted(questions, key=lambda questions: questions[TIME_INDEX])
 
+    return sorted_question
 def add_headers():
     pass
