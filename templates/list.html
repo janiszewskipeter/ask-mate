@@ -7,20 +7,20 @@
 </head>
 <body>
 <a href="/"><h1>� Ask Mate</h1></a><br>
-    <table>
-    <tr><td><strong>ID</strong></td><td><strong>Time</strong></td><td><strong>Title</strong></td><td><strong>Question</strong></td><td><strong>Image</strong></td></tr>
-        {% for row in data %}
-            <tr>
-            {% for cell in row %}
-              {% if row.index(cell) == TITLE %}
-                <td><a href="/question/{{ row[ID] }}">{{ cell }}</a></td>
-              {% else %}
-                <td>{{ cell }}</td>
-              {% endif %}
-            {% endfor %}
-            </tr>
+
+<table>
+        <th>Submission Time | </th>
+        <th>Title | </th>
+        <th>Message |</th>
+        {% for question in questions %}
+        <tr>
+            <td>{{ question.submission_time }}</td>
+            <td>{{ question.title }}</td>
+            <td>{{ question.message }}</td>
+        </tr>
         {% endfor %}
     </table>
+
 <a href="/add_question"><div class="button">Add question</div></a>
 
 

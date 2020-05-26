@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import connection
 import util
+import data_manager
 
 app = Flask(__name__)
 PATH = app.root_path
@@ -14,9 +15,9 @@ CONTENT = -2
 @app.route("/")
 @app.route("/list")
 def list():
-    data = connection.get_data('question.csv', PATH)
-
-    return render_template('list.html', data=data, TITLE=TITLE, ID=ID)
+    # data = connection.get_data('question.csv', PATH)
+    questions = data_manager.get_questions()
+    return render_template('list.html', questions=questions)
 
 
 @app.route("/question/<question_id>", methods=['POST', 'GET'])

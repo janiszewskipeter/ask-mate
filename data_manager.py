@@ -1,3 +1,10 @@
+from typing import List, Dict
+
+from psycopg2 import sql
+from psycopg2.extras import RealDictCursor
+
+import sql_connection
+
 '''
 Layer between the server and the data.
 Functions here should be called from the server.py
@@ -20,3 +27,23 @@ def add_commnet_to_qustion(cursor: RealDictCursor, question_id: int, answer_id: 
         VALUES ((%s),(%s),(%s), TIMESTAMP WITHOUT TIME ZONE, (%s))
         ORDER BY submission_time""", [question_id, answer_id, message_text, submission_time, edited_count])
     return cursor.fetchall()
+
+
+@sql_connection.connection_handler
+def get_questions(cursor: RealDictCursor) -> list:
+    query = """
+        SELECT *
+        FROM question
+        ORDER BY submission_time;"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+def get_answers(cursor: RealDictCursor) -> list:
+    query = """
+        SELECT *
+        FROM answer
+        ORDER BY submission_time;"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+    """
