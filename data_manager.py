@@ -87,3 +87,13 @@ def answer_by_question_id(cursor: RealDictCursor, id: int) -> list:
                    {'id': id})
     answers = cursor.fetchall()
     return answers
+
+@sql_connection.connection_handler
+def get_new_question_id():
+    questions = read_all_questions()
+    max_id = "0"
+    for i in questions:
+        if int(max_id) < int(i['id']):
+            max_id = i['id']
+    max_id = int(max_id) + 1
+    return str(max_id)

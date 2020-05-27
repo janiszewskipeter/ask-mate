@@ -34,25 +34,27 @@ def route_question(question_id):
 
 
 
-@app.route("/add_question", methods=['POST', 'GET'])
-def add_question():
+
+
+@app.route('/add_question', methods=['GET', 'POST'])
+def submit_question():
     if request.method == 'POST':
-        id = util.id_generator()
-        submission_time = util.get_time()
-        # view_number = request.form[]
-        # vote_number = request.form[]
-        title = request.form['question_title']
-        message = request.form['question']
-        # image = request.form[]
-        questions = connection.get_data('question.csv', PATH)
-        data_to_save = [id,submission_time,title,message,"image"]
-
-        # question_to_save = questions.append(data_to_save)
-
-        connection.save_data(PATH, 'question.csv', data_to_save, 'a')
-        data = connection.get_data('question.csv', PATH)
-        return render_template('list.html', data=data, TITLE=TITLE, ID=ID )
-
+        id_ = data_manager.get_new_question_id()
+        submission_time = data_manager.convert_time(data_manager.get_current_unix_timestamp())
+        title = request.form['title']
+        message = request.form['message']
+        views = 0
+        votes = 0
+        question_dict = {
+            'id': id_,
+            'submission_time': submission_time,
+            'view_number': views,
+            'vote_number': votes,
+            'title': title,
+            'message': message,
+            'image': None
+        }
+        data_manager.add_question(question_dict)
     return render_template('add_question.html')
 
 
