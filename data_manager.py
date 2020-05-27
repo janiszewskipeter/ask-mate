@@ -11,7 +11,7 @@ Functions here should be called from the server.py
 and these should use generic functions from the connection.py
 '''
 
-@sql_connection.connection_handler
+@connection.connection_handler
 def get_question_by_id(cursor: RealDictCursor, id: int) -> list:
     cursor.execute("""
         SELECT id, submission_time, view_number, vote_number, title, message, image
@@ -20,10 +20,32 @@ def get_question_by_id(cursor: RealDictCursor, id: int) -> list:
         ORDER BY submission_time""", [id])
     return cursor.fetchall()
 
+
+@sql_connection.connection_handler
+def get_answer_by_id(cursor: RealDictCursor, id: int) -> list:
+    cursor.execute("""
+        SELECT id, submission_time, question_id, vote_number, message, image
+        FROM answer
+        WHERE id = (%s)
+        ORDER BY submission_time""", [id])
+    return cursor.fetchall()
+
+@sql_connection.connection_handler
+def get_comment_by_id(cursor: RealDictCursor, id: int) -> list:
+    cursor.execute("""
+        SELECT id, question_id,  submission_time, message, image
+        FROM comment
+        WHERE id = (%s)
+        ORDER BY submission_time""", [id])
+    return cursor.fetchall()
+
+
+@sql_connection.connection_handler
+def add_commnet_to_qustion(cursor: RealDictCursor, question_id: int, answer_id: int, message: str, submission_time: str, edited_count: int ) -> list:
 @sql_connection.connection_handler
 def add_commnet_to_qustion(cursor: RealDictCursor, question_id: int, answer_id: int, message_text: str, submission_time: str, edited_count: int ) -> list:
     cursor.execute("""
-        INSERT INTO comment 
+        INSERT INTO commnet 
         VALUES ((%s),(%s),(%s), TIMESTAMP WITHOUT TIME ZONE, (%s))
         ORDER BY submission_time""", [question_id, answer_id, message_text, submission_time, edited_count])
     return cursor.fetchall()
@@ -34,7 +56,7 @@ def get_questions(cursor: RealDictCursor) -> list:
     query = """
         SELECT *
         FROM question
-        ORDER BY submission_time DESC;"""
+        ORDER BY submission_time;"""
     cursor.execute(query)
     return cursor.fetchall()
 
