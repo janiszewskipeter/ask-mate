@@ -2,6 +2,7 @@ from typing import List, Dict
 
 from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
+import time
 
 import sql_connection
 
@@ -40,10 +41,7 @@ def get_comment_by_id(cursor: RealDictCursor, id: int) -> list:
         ORDER BY submission_time""", [id])
     return cursor.fetchall()
 
-# INSERT INTO comment
-# VALUES (12,1,1,'abc', CURRENT_TIMESTAMP, 2)
 
-@sql_connection.connection_handler
 def add_commnet_to_qustion(cursor: RealDictCursor, question_id: int, message: str, edited_count: int ) -> list:
     cursor.execute("""
         INSERT INTO comment(question_id, message, submission_time, edited_count)
@@ -81,9 +79,12 @@ def get_first_five_questions(cursor: RealDictCursor) -> list:
     return cursor.fetchall()
 
 @sql_connection.connection_handler
-def new_question(cursor: RealDictCursor, id: int) -> list:
-    cursor.execute("""INSERT INTO question
-    VALUES (%(id)s,%(submission_time)s,%(view_number)s,%(vote_number)s,%(title)s,%(message)s,%(image)s);""",
+def add_question(cursor: RealDictCursor, new_question):
+    cursor.execute("""
+                        INSERT INTO question(id, submission_time, view_number, vote_number, title, message, image) 
+                        VALUES (%(id)s,%(submission_time)s, %(view_number)s, %(vote_number)s,%(title)s,%(message)s,
+                        %(image)s);
+                        """,
                    new_question)
 
 @sql_connection.connection_handler
@@ -106,3 +107,21 @@ def answer_by_question_id(cursor: RealDictCursor, id: int) -> list:
                    {'id': id})
     answers = cursor.fetchall()
     return answers
+
+def get_new_question_id():
+    questions = get_questions()
+    max_id = "0"
+    for i in questions:
+        if int(max_id) < int(i['id']):
+            max_id = i['id']
+    max_id = int(max_id) + 1
+    return str(max_id)
+
+def convert_time(unix_timestamp):
+    readable_time = time.ctime(int(unix_timestamp))
+    return readable_time
+
+
+def get_current_unix_timestamp():
+    current_time = time.time()
+    return int(current_time)
