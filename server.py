@@ -18,6 +18,7 @@ def index():
     questions = data_manager.get_first_five_questions()
     return render_template('index.html', questions=questions)
 
+
 @app.route("/list")
 def list():
     questions = data_manager.get_questions()
@@ -26,12 +27,10 @@ def list():
 
 @app.route("/question/<question_id>")
 def route_question(question_id):
-
     question = data_manager.read_a_question(int(question_id))
     answers_list = data_manager.answer_by_question_id(int(question_id))
 
     return render_template("question.html", question=question, question_id=question_id, answers_list=answers_list)
-
 
 
 @app.route("/add_question", methods=['POST', 'GET'])
@@ -45,13 +44,13 @@ def add_question():
         message = request.form['question']
         # image = request.form[]
         questions = connection.get_data('question.csv', PATH)
-        data_to_save = [id,submission_time,title,message,"image"]
+        data_to_save = [id, submission_time, title, message, "image"]
 
         # question_to_save = questions.append(data_to_save)
 
         connection.save_data(PATH, 'question.csv', data_to_save, 'a')
         data = connection.get_data('question.csv', PATH)
-        return render_template('list.html', data=data, TITLE=TITLE, ID=ID )
+        return render_template('list.html', data=data, TITLE=TITLE, ID=ID)
 
     return render_template('add_question.html')
 
@@ -68,28 +67,30 @@ def add_answer(question_id):
         answers.append(answer_to_save)
         connection.save_data(PATH, 'answer.csv', answer_to_save, 'a')
 
-        return redirect(url_for('question', question_id=question_id ))
-    else:
-        answers = connection.get_data('answer.csv', PATH)
-        question_data = connection.get_data('question.csv', PATH)
-        question = [q for q in question_data if question_data[0] == question_id]
-        answer = [a for a in answers if answers[0] == question_id]
-        return render_template('add_answer.html', question=question, answer=answer, question_id=question_id, )
+        return redirect(url_for('question', question_id=question_id))
+
+    answers = connection.get_data('answer.csv', PATH)
+    question_data = connection.get_data('question.csv', PATH)
+    question = [q for q in question_data if question_data[0] == question_id]
+    answer = [a for a in answers if answers[0] == question_id]
+    return render_template('add_answer.html', question=question, answer=answer, question_id=question_id, )
+
 
 @app.route("/question/<question_id>/new-comment", methods=['POST', 'GET'])
 def add_comment(question_id):
     if request.method == 'POST':
         edited_count = 0
-        answer_id = question_id
+        comment_id = question_id
         message = request.form['comment']
-        data_manager.add_commnet_to_qustion(message=message, question_id=question_id, answer_id=answer_id, edited_count=edited_count )
-        return redirect(url_for('question', question_id=question_id ))
+        data_manager.add_commnet_to_qustion(comment_id=comment_id, message=message, question_id=question_id,
+                                            edited_count=edited_count)
+        return redirect(url_for('route_question', question_id=question_id))
 
-    else:
-        question = data_manager.get_question_by_id(question_id)
-        answer = data_manager.get_answer_by_id(question_id)
-        comment =  data_manager.get_comment_by_id(question_id)
-        return render_template('add_comment.html', question_id=question_id, )
+    question = data_manager.get_question_by_id(question_id)
+    answer = data_manager.get_answer_by_id(question_id)
+    comment = data_manager.get_comment_by_id(question_id)
+    return render_template('add_comment.html', question_id=question_id, )
+
 
 @app.route("/question/<question_id>/delete")
 def delete():
@@ -113,14 +114,15 @@ def edit(question_id):
         submission_time = questions[index][TIME]
         questions[index] = [id, submission_time, title, message, "image"]
 
-        connection.save_edited_data(PATH, 'question.csv', questions,'w')
+        connection.save_edited_data(PATH, 'question.csv', questions, 'w')
 
-        return redirect(url_for('question', question_id=question_id ))
-    else:
-        questions= connection.get_data('question.csv', PATH)
-        question = [q for q in questions if q[0] == question_id][0]
+        return redirect(url_for('question', question_id=question_id))
 
-        return render_template('add_question.html', edit=edit, question_id=question_id, question=question, TITLE=TITLE, CONTENT=CONTENT)
+    questions = connection.get_data('question.csv', PATH)
+    question = [q for q in questions if q[0] == question_id][0]
+
+    return render_template('add_question.html', edit=edit, question_id=question_id, question=question, TITLE=TITLE,
+                           CONTENT=CONTENT)
 
 
 if __name__ == "__main__":
@@ -129,4 +131,4 @@ if __name__ == "__main__":
         port=5050,
         debug=True,
     )
-#id,submission_time,vote_number,question_id,message,image
+# id,submission_time,vote_number,question_id,message,image

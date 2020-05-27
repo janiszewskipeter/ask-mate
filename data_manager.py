@@ -11,7 +11,7 @@ Functions here should be called from the server.py
 and these should use generic functions from the connection.py
 '''
 
-@connection.connection_handler
+@sql_connection.connection_handler
 def get_question_by_id(cursor: RealDictCursor, id: int) -> list:
     cursor.execute("""
         SELECT id, submission_time, view_number, vote_number, title, message, image
@@ -24,31 +24,31 @@ def get_question_by_id(cursor: RealDictCursor, id: int) -> list:
 @sql_connection.connection_handler
 def get_answer_by_id(cursor: RealDictCursor, id: int) -> list:
     cursor.execute("""
-        SELECT id, submission_time, question_id, vote_number, message, image
+        SELECT *
         FROM answer
         WHERE id = (%s)
         ORDER BY submission_time""", [id])
     return cursor.fetchall()
 
+
 @sql_connection.connection_handler
 def get_comment_by_id(cursor: RealDictCursor, id: int) -> list:
     cursor.execute("""
-        SELECT id, question_id,  submission_time, message, image
+        SELECT *
         FROM comment
-        WHERE id = (%s)
+        WHERE question_id = (%s)
         ORDER BY submission_time""", [id])
     return cursor.fetchall()
 
+# INSERT INTO comment
+# VALUES (12,1,1,'abc', CURRENT_TIMESTAMP, 2)
 
 @sql_connection.connection_handler
-def add_commnet_to_qustion(cursor: RealDictCursor, question_id: int, answer_id: int, message: str, submission_time: str, edited_count: int ) -> list:
-@sql_connection.connection_handler
-def add_commnet_to_qustion(cursor: RealDictCursor, question_id: int, answer_id: int, message_text: str, submission_time: str, edited_count: int ) -> list:
+def add_commnet_to_qustion(cursor: RealDictCursor, question_id: int, message: str, edited_count: int ) -> list:
     cursor.execute("""
-        INSERT INTO commnet 
-        VALUES ((%s),(%s),(%s), TIMESTAMP WITHOUT TIME ZONE, (%s))
-        ORDER BY submission_time""", [question_id, answer_id, message_text, submission_time, edited_count])
-    return cursor.fetchall()
+        INSERT INTO comment(question_id, message, submission_time, edited_count)
+        VALUES ((%s),(%s), CURRENT_TIMESTAMP, (%s))
+        """, [question_id, message, edited_count])
 
 
 @sql_connection.connection_handler
@@ -79,9 +79,6 @@ def get_first_five_questions(cursor: RealDictCursor) -> list:
         LIMIT 5;"""
     cursor.execute(query)
     return cursor.fetchall()
-
-
-
 
 @sql_connection.connection_handler
 def new_question(cursor: RealDictCursor, id: int) -> list:
