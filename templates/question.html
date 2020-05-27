@@ -7,8 +7,10 @@
 </head>
 <body>
 <a href="/"><h1>� Ask Mate</h1></a><br>
-<h2>{{ question[-3] }}</h2>
-<p>{{ question[-2] }}</p>
+{% for q in question %}
+    <h2>{{ q.title }}</h2>
+    <p>{{ q.message }}</p>
+{% endfor %}
 <form>
     <button class="button" formaction='{{ url_for('add_answer', question_id=question_id) }}'>Add an answer</button>
 </form>
@@ -18,13 +20,11 @@
 <br><br><br><br>
 <h2>Answers:</h2>
 
- {% for row in answer %}
-            {% for cell in row %}
-              {% if row.index(cell) == 1 %}
-                <p>{{ cell }}</p>
-              {% endif %}
-            {% endfor %}
-        {% endfor %}
+ {% for answer in answers_list %}
+     {{ answer.title }}
+     <br>
+     {{ answer.message }}
+ {% endfor %}
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, url_for, redirect
 import connection
 import util
 import data_manager
@@ -13,22 +13,25 @@ CONTENT = -2
 
 
 @app.route("/")
+@app.route("/index")
+def index():
+    questions = data_manager.get_first_five_questions()
+    return render_template('index.html', questions=questions)
+
 @app.route("/list")
 def list():
-    # data = connection.get_data('question.csv', PATH)
     questions = data_manager.get_questions()
     return render_template('list.html', questions=questions)
 
 
-@app.route("/question/<question_id>", methods=['POST', 'GET'])
-def question(question_id):
-    questions = connection.get_data('question.csv', PATH)
-    answers = connection.get_data('answer.csv', PATH)
-    for q in questions:
-        if question_id == q[0]:
-            question = q
-    answer= [a for a in answers if a[0] == question_id]
-    return render_template('question.html', question=question, question_id=question_id, answer=answer)
+@app.route("/question/<question_id>")
+def route_question(question_id):
+
+    question = data_manager.read_a_question(int(question_id))
+    answers_list = data_manager.answer_by_question_id(int(question_id))
+
+    return render_template("question.html", question=question, question_id=question_id, answers_list=answers_list)
+
 
 
 @app.route("/add_question", methods=['POST', 'GET'])
