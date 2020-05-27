@@ -110,7 +110,6 @@ def answer_by_question_id(cursor: RealDictCursor, id: int) -> list:
     answers = cursor.fetchall()
     return answers
 
-@sql_connection.connection_handler
 def get_new_question_id():
     questions = read_all_questions()
     max_id = "0"
@@ -119,3 +118,12 @@ def get_new_question_id():
             max_id = i['id']
     max_id = int(max_id) + 1
     return str(max_id)
+
+def convert_time(unix_timestamp):
+    readable_time = time.ctime(int(unix_timestamp))
+    return readable_time
+
+
+def get_current_unix_timestamp():
+    current_time = time.time()
+    return int(current_time)
