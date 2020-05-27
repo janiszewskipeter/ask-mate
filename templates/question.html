@@ -17,6 +17,9 @@
 <form>
     <button class="button" formaction='{{ url_for('edit', question_id=question_id) }}'>Edit question</button>
 </form>
+<form>
+    <button class="button" formaction='{{ url_for('add_comment', question_id=question_id) }}'>Add comment</button>
+</form>
 <br><br><br><br>
 <h2>Answers:</h2>
 
@@ -24,6 +27,12 @@
      {{ answer.title }}
      <br>
      {{ answer.message }}
+ {% endfor %}
+
+<h2>Comments:</h2>
+
+ {% for comment in comments %}
+     {{ comment.message }}<br>
  {% endfor %}
 
 </body>

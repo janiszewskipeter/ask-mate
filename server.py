@@ -26,7 +26,6 @@ def list():
 
 @app.route("/question/<question_id>")
 def route_question(question_id):
-
     question = data_manager.read_a_question(int(question_id))
     answers_list = data_manager.answer_by_question_id(int(question_id))
 
@@ -34,10 +33,8 @@ def route_question(question_id):
 
 
 
-
-
-@app.route('/add_question', methods=['GET', 'POST'])
-def submit_question():
+@app.route("/add_question", methods=['POST', 'GET'])
+def add_question():
     if request.method == 'POST':
         id_ = data_manager.get_new_question_id()
         submission_time = data_manager.convert_time(data_manager.get_current_unix_timestamp())
@@ -70,28 +67,30 @@ def add_answer(question_id):
         answers.append(answer_to_save)
         connection.save_data(PATH, 'answer.csv', answer_to_save, 'a')
 
-        return redirect(url_for('question', question_id=question_id ))
-    else:
-        answers = connection.get_data('answer.csv', PATH)
-        question_data = connection.get_data('question.csv', PATH)
-        question = [q for q in question_data if question_data[0] == question_id]
-        answer = [a for a in answers if answers[0] == question_id]
-        return render_template('add_answer.html', question=question, answer=answer, question_id=question_id, )
+        return redirect(url_for('question', question_id=question_id))
+
+    answers = connection.get_data('answer.csv', PATH)
+    question_data = connection.get_data('question.csv', PATH)
+    question = [q for q in question_data if question_data[0] == question_id]
+    answer = [a for a in answers if answers[0] == question_id]
+    return render_template('add_answer.html', question=question, answer=answer, question_id=question_id, )
+
 
 @app.route("/question/<question_id>/new-comment", methods=['POST', 'GET'])
 def add_comment(question_id):
     if request.method == 'POST':
         edited_count = 0
-        answer_id = question_id
+        comment_id = question_id
         message = request.form['comment']
-        data_manager.add_commnet_to_qustion(message=message, question_id=question_id, answer_id=answer_id, edited_count=edited_count )
-        return redirect(url_for('question', question_id=question_id ))
+        data_manager.add_commnet_to_qustion(comment_id=comment_id, message=message, question_id=question_id,
+                                            edited_count=edited_count)
+        return redirect(url_for('route_question', question_id=question_id))
 
-    else:
-        question = data_manager.get_question_by_id(question_id)
-        answer = data_manager.get_answer_by_id(question_id)
-        comment =  data_manager.get_comment_by_id(question_id)
-        return render_template('add_comment.html', question_id=question_id, )
+    question = data_manager.get_question_by_id(question_id)
+    answer = data_manager.get_answer_by_id(question_id)
+    comment = data_manager.get_comment_by_id(question_id)
+    return render_template('add_comment.html', question_id=question_id, )
+
 
 @app.route("/question/<question_id>/delete")
 def delete():
@@ -115,14 +114,15 @@ def edit(question_id):
         submission_time = questions[index][TIME]
         questions[index] = [id, submission_time, title, message, "image"]
 
-        connection.save_edited_data(PATH, 'question.csv', questions,'w')
+        connection.save_edited_data(PATH, 'question.csv', questions, 'w')
 
-        return redirect(url_for('question', question_id=question_id ))
-    else:
-        questions= connection.get_data('question.csv', PATH)
-        question = [q for q in questions if q[0] == question_id][0]
+        return redirect(url_for('question', question_id=question_id))
 
-        return render_template('add_question.html', edit=edit, question_id=question_id, question=question, TITLE=TITLE, CONTENT=CONTENT)
+    questions = connection.get_data('question.csv', PATH)
+    question = [q for q in questions if q[0] == question_id][0]
+
+    return render_template('add_question.html', edit=edit, question_id=question_id, question=question, TITLE=TITLE,
+                           CONTENT=CONTENT)
 
 
 if __name__ == "__main__":
