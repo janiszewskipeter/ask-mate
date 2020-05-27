@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add comment</title>
+</head>
+<body>
+<a href="/"><h1>� Ask Mate</h1></a><br>
+        <h2>Add comment</h2>
+        <form action="{{ url_for("add_comment", id=id) }}" method="POST">
+            <!-- Label for the textarea to help the user understand what it is for. -->
+            <label for="answer-input">New comment:</label><br>
+            <textarea id="comment-input" name="comment" rows="10" cols="60"></textarea><br><br><br>
+
+            <button class="button" type="submit">Send</button>
+        </form>
+</body>
+</html>
