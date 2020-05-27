@@ -2,6 +2,7 @@ from typing import List, Dict
 
 from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
+import time
 
 import sql_connection
 
@@ -11,7 +12,7 @@ Functions here should be called from the server.py
 and these should use generic functions from the connection.py
 '''
 
-@connection.connection_handler
+@sql_connection.connection_handler
 def get_question_by_id(cursor: RealDictCursor, id: int) -> list:
     cursor.execute("""
         SELECT id, submission_time, view_number, vote_number, title, message, image
@@ -42,6 +43,8 @@ def get_comment_by_id(cursor: RealDictCursor, id: int) -> list:
 
 @sql_connection.connection_handler
 def add_commnet_to_qustion(cursor: RealDictCursor, question_id: int, answer_id: int, message: str, submission_time: str, edited_count: int ) -> list:
+    pass
+
 @sql_connection.connection_handler
 def add_commnet_to_qustion(cursor: RealDictCursor, question_id: int, answer_id: int, message_text: str, submission_time: str, edited_count: int ) -> list:
     cursor.execute("""
@@ -84,9 +87,12 @@ def get_first_five_questions(cursor: RealDictCursor) -> list:
 
 
 @sql_connection.connection_handler
-def new_question(cursor: RealDictCursor, id: int) -> list:
-    cursor.execute("""INSERT INTO question
-    VALUES (%(id)s,%(submission_time)s,%(view_number)s,%(vote_number)s,%(title)s,%(message)s,%(image)s);""",
+def add_question(cursor: RealDictCursor, new_question):
+    cursor.execute("""
+                        INSERT INTO question(id, submission_time, view_number, vote_number, title, message, image) 
+                        VALUES (%(id)s,%(submission_time)s, %(view_number)s, %(vote_number)s,%(title)s,%(message)s,
+                        %(image)s);
+                        """,
                    new_question)
 
 @sql_connection.connection_handler
@@ -111,7 +117,7 @@ def answer_by_question_id(cursor: RealDictCursor, id: int) -> list:
     return answers
 
 def get_new_question_id():
-    questions = read_all_questions()
+    questions = get_questions()
     max_id = "0"
     for i in questions:
         if int(max_id) < int(i['id']):
