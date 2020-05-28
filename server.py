@@ -36,22 +36,19 @@ def route_question(question_id):
 @app.route("/add_question", methods=['POST', 'GET'])
 def add_question():
     if request.method == 'POST':
-        id_ = data_manager.get_new_question_id()
-        submission_time = data_manager.convert_time(data_manager.get_current_unix_timestamp())
         title = request.form['question_title']
         message = request.form['question']
         views = 0
         votes = 0
-        question_dict = {
-            'id': id,
-            'submission_time': submission_time,
+        data_manager.add_question(title, message)
+        question = {
             'view_number': views,
             'vote_number': votes,
             'title': title,
             'message': message,
-            'image': None
         }
-        data_manager.add_question(question_dict)
+        return redirect(url_for('list'))
+
     return render_template('add_question.html')
 
 
