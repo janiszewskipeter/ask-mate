@@ -107,6 +107,7 @@ def get_answers(cursor: RealDictCursor) -> list:
     cursor.execute(query)
     return cursor.fetchall()
 
+
 @sql_connection.connection_handler
 def get_first_five_questions(cursor: RealDictCursor) -> list:
     query = """
@@ -127,21 +128,18 @@ def get_question_id_from_comment(cursor: RealDictCursor, comment_id: int) -> lis
     return cursor.fetchall()
 
 @sql_connection.connection_handler
-def add_question(cursor: RealDictCursor, new_question):
-    cursor.execute("""
-                        INSERT INTO question(id, submission_time, view_number, vote_number, title, message, image) 
-                        VALUES (%(id)s,%(submission_time)s, %(view_number)s, %(vote_number)s,%(title)s,%(message)s,
-                        %(image)s);
-                        """,
-                   new_question)
+def add_question(cursor: RealDictCursor, title: str, message: str) -> list:
+    cursor.execute("""INSERT INTO question(submission_time, title, message)
+                        VALUES (CURRENT_TIMESTAMP, (%s), (%s));
+                        """, [title, message])
+
 
 @sql_connection.connection_handler
 def read_a_question(cursor: RealDictCursor, id: int) -> list:
-    cursor.execute("""
-                    SELECT * FROM question
-                    WHERE id=%(id)s;
-                    """,
-                   {'id': id})
+    cursor.execute("""SELECT * FROM question
+                WHERE id=%(id)s;
+                """,
+               {'id': id})
     questions = cursor.fetchall()
     return questions
 
@@ -164,12 +162,3 @@ def get_new_question_id():
             max_id = i['id']
     max_id = int(max_id) + 1
     return str(max_id)
-
-def convert_time(unix_timestamp):
-    readable_time = time.ctime(int(unix_timestamp))
-    return readable_time
-
-
-def get_current_unix_timestamp():
-    current_time = time.time()
-    return int(current_time)

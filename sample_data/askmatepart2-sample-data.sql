@@ -103,10 +103,6 @@ booklet
 app.js (bundled file with webpack, including jquery)', 'images/image1.png');
 INSERT INTO question VALUES (2, '2017-05-01 10:41:00', 1364, 57, 'Drawing canvas with an image picked with Cordova Camera Plugin', 'I''m getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I''m on IOS, it throws errors such as cross origin issue, or that I''m trying to use an unknown format.
 ', NULL);
-INSERT INTO question VALUES (3, '2017-05-01 12:41:00', 1364, 57, 'How to live?', 'Tell me please.', NULL);
-INSERT INTO question VALUES (4, '2017-05-01 13:11:00', 1364, 57, 'Whats for lunch?', 'Hungry hippo', NULL);
-INSERT INTO question VALUES (5, '2017-05-01 10:01:20', 1364, 57, 'Do you like me?', 'Hahaha', NULL);
-SELECT pg_catalog.setval('question_id_seq', 2, true);
 
 INSERT INTO answer VALUES (1, '2017-04-28 16:49:00', 4, 1, 'You need to use brackets: my_list = []', NULL);
 INSERT INTO answer VALUES (2, '2017-04-25 14:42:00', 35, 1, 'Look it up in the Python docs', 'images/image2.jpg');
