@@ -3,10 +3,11 @@
     <head>
         <meta charset="utf-8">
         <title>New Answer</title>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
     </head>
     <body>
-    <a href="/"><h1>� Ask Mate</h1></a><br>
+    <a href="/"><h1>ೱ Ask Mate</h1></a><br>
         <h2>Answer form</h2>
         <form action="{{ url_for("add_answer", question_id=question_id) }}" method="POST">
             <!-- Label for the textarea to help the user understand what it is for. -->

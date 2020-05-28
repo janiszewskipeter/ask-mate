@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Ask Mate </title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
 </head>
 <body>
-<a href="/"><h1>� Ask Mate</h1></a><br>
+<a href="/"><div class="logo">ೱ Ask Mate</div></a><br>
 
 <table>
         {% for question in questions %}
@@ -17,9 +18,9 @@
         </tr>
         {% endfor %}
     </table>
-
+<div class="button_area">
 <a href="/add_question"><div class="button">Add question</div></a>
-
+</div>
 
 </body>
 </html>
