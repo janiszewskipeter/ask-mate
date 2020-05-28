@@ -28,9 +28,9 @@ def list():
 def route_question(question_id):
     question = data_manager.read_a_question(int(question_id))
     answers_list = data_manager.answer_by_question_id(int(question_id))
+    comments = data_manager.get_comment_by_question_id(question_id)
 
-    return render_template("question.html", question=question, question_id=question_id, answers_list=answers_list)
-
+    return render_template("question.html", comments=comments, question=question, question_id=question_id, answers_list=answers_list)
 
 
 @app.route("/add_question", methods=['POST', 'GET'])
@@ -58,38 +58,59 @@ def add_question():
 @app.route("/question/<question_id>/new-answer", methods=['POST', 'GET'])
 def add_answer(question_id):
     if request.method == 'POST':
-        answers = connection.get_data('answer.csv', PATH)
-        question_data = connection.get_data('question.csv', PATH)
-        question = [q for q in question_data if question_data[0] == question_id]
+        # answers = connection.get_data('answer.csv', PATH)
+        # question_data = connection.get_data('question.csv', PATH)
+        # question = [q for q in question_data if question_data[0] == question_id]
+        #
+        # answer_to_save = [question_id, answer]
+        #
+        # answers.append(answer_to_save)
+        # connection.save_data(PATH, 'answer.csv', answer_to_save, 'a')
+
         answer = request.form['answer']
-        answer_to_save = [question_id, answer]
+        data_manager.save_answer(answer, question_id)
 
-        answers.append(answer_to_save)
-        connection.save_data(PATH, 'answer.csv', answer_to_save, 'a')
-
-        return redirect(url_for('question', question_id=question_id))
-
-    answers = connection.get_data('answer.csv', PATH)
-    question_data = connection.get_data('question.csv', PATH)
-    question = [q for q in question_data if question_data[0] == question_id]
-    answer = [a for a in answers if answers[0] == question_id]
-    return render_template('add_answer.html', question=question, answer=answer, question_id=question_id, )
-
-
-@app.route("/question/<question_id>/new-comment", methods=['POST', 'GET'])
-def add_comment(question_id):
-    if request.method == 'POST':
-        edited_count = 0
-        comment_id = question_id
-        message = request.form['comment']
-        data_manager.add_commnet_to_qustion(comment_id=comment_id, message=message, question_id=question_id,
-                                            edited_count=edited_count)
         return redirect(url_for('route_question', question_id=question_id))
 
+    answers = data_manager.get_answer_by_question_id(question_id)
     question = data_manager.get_question_by_id(question_id)
-    answer = data_manager.get_answer_by_id(question_id)
-    comment = data_manager.get_comment_by_id(question_id)
-    return render_template('add_comment.html', question_id=question_id, )
+    return render_template('add_answer.html', question=question, question_id=question_id, )
+
+
+@app.route("/question/<question_id>/<answer_id>/new-comment", methods=['POST', 'GET'])
+def add_comment(question_id, answer_id):
+    question_id = int(question_id)
+    answer_id = int(answer_id)
+    if request.method == 'POST':
+        if answer_id == -1:
+            edited_count = 0
+            message = request.form['comment']
+            data_manager.add_comment_to_qustion(message=message, question_id=question_id, edited_count=edited_count)
+            return redirect(url_for('route_question', question_id=question_id))
+        else:
+            edited_count = 0
+            message = request.form['comment']
+            data_manager.add_comment_to_answer(message=message, answer_id=answer_id, edited_count=edited_count)
+            return redirect(url_for('route_question', question_id=question_id))
+
+    # if answer_id == -1:
+    #     question_id = question_id
+    # else:
+    #     question_id = data_manager.get_question_id_from_answer(answer_id)
+    return render_template('add_comment.html', question_id=question_id, answer_id=answer_id)
+
+# @app.route("/question/<answer_id>/new-answer-comment", methods=['POST', 'GET'])
+# def add_comment_to_answer(answer_id):
+#     question_id = data_manager.get_question_id_from_answer(answer_id)
+#     if request.method == 'POST':
+#         edited_count = 0
+#         message = request.form['comment']
+#         data_manager.add_comment_to_answer(message=message, answer_id=answer_id, edited_count=edited_count)
+#         return redirect(url_for('route_question', question_id=question_id))
+#
+#     # question = data_manager.get_question_by_id(question_id)
+#     # answer = data_manager.get_answer_by_id(question_id)
+#     return render_template('add_comment.html', question_id=question_id, )
 
 
 @app.route("/question/<question_id>/delete")

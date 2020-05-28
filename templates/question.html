@@ -3,36 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>Question</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
 </head>
 <body>
-<a href="/"><h1>� Ask Mate</h1></a><br>
+<a href="/"><div class="logo">ೱ Ask Mate</div></a><br>
 {% for q in question %}
-    <h2>{{ q.title }}</h2>
-    <p>{{ q.message }}</p>
-{% endfor %}
-<form>
-    <button class="button" formaction='{{ url_for('add_answer', question_id=question_id) }}'>Add an answer</button>
-</form>
-<form>
-    <button class="button" formaction='{{ url_for('edit', question_id=question_id) }}'>Edit question</button>
-</form>
-<form>
-    <button class="button" formaction='{{ url_for('add_comment', question_id=question_id) }}'>Add comment</button>
-</form>
-<br><br><br><br>
+    <div class="light_gray_box">
+        <h2>{{ q.title }}</h2>
+        <p>{{ q.message }}</p>
+        {% endfor %}
+        <div class="button_area">
+        <form>
+            <button class="button" formaction='{{ url_for('add_answer', question_id=question_id) }}'>Add an answer</button>
+        </form>
+        <form>
+            <button class="button" formaction='{{ url_for('edit', question_id=question_id) }}'>Edit question</button>
+        </form>
+        <form>
+            <button class="button" formaction='{{ url_for('add_comment', question_id=question_id, answer_id=-1) }}'>Add comment</button>
+        </form>
+        </div>
+    </div>
 <h2>Answers:</h2>
-
  {% for answer in answers_list %}
-     {{ answer.title }}
-     <br>
-     {{ answer.message }}
+     <div class="light_gray_box answers_comments">
+         <h3>{{ answer.title }}</h3>
+             <br>
+             <p>{{ answer.message }}</p>
+             <br>
+        <div class="light_gray_box answers_comments">
+         {% for comment in comments %}
+             {% if comment.answer_id == answer.id %}
+             <p>{{ comment.message }}</p>
+             {% endif %}
+             </div>
+         {% endfor %}
+     <form>
+         <div class="button_area">
+        <button class="button small" formaction='{{ url_for('add_comment', question_id=question_id, answer_id=answer.id) }}'>Add comment</button>
+         </div>
+     </form>
+     </div>
  {% endfor %}
 
 <h2>Comments:</h2>
 
  {% for comment in comments %}
-     {{ comment.message }}<br>
+     {% if comment.question_id %}
+     <div class="light_gray_box answers_comments">
+     {{ comment.message }}
+     {% endif %}
+     </div>
  {% endfor %}
 
 </body>
