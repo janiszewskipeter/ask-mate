@@ -51,11 +51,11 @@ def add_question():
 
     return render_template('add_question.html')
 
-
+'''
 @app.route("/question/<question_id>/new-answer", methods=['POST', 'GET'])
 def add_answer(question_id):
     if request.method == 'POST':
-        answers = connection.get_data('answer.csv', PATH)
+        answers = data_manager.answer_by_question_id(id)
         question_data = connection.get_data('question.csv', PATH)
         question = [q for q in question_data if question_data[0] == question_id]
         answer = request.form['answer']
@@ -71,6 +71,22 @@ def add_answer(question_id):
     question = [q for q in question_data if question_data[0] == question_id]
     answer = [a for a in answers if answers[0] == question_id]
     return render_template('add_answer.html', question=question, answer=answer, question_id=question_id, )
+'''
+
+@app.route('/question/<question_id>/add-answer', methods=['GET', 'POST'])
+def add_answer(question_id):
+    if request.method == 'POST':
+        question = data_manager.read_a_question(int(question_id))
+        question_id = request.args.get('question_id')
+        message = request.form['message']
+        answer = {
+            'question_id': question_id,
+            'message': message,
+            'vote_number': 0
+        }
+        data_manager.add_answer(answer)
+        return render_template('question.html', question=question, answer=answer, question_id=question_id, )
+    return render_template('question.html')
 
 
 @app.route("/question/<question_id>/new-comment", methods=['POST', 'GET'])

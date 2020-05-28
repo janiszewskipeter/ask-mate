@@ -54,7 +54,7 @@ def get_questions(cursor: RealDictCursor) -> list:
     query = """
         SELECT *
         FROM question
-        ORDER BY submission_time;"""
+        ORDER BY submission_time DESC;"""
     cursor.execute(query)
     return cursor.fetchall()
 

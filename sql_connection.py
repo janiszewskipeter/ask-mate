@@ -15,10 +15,10 @@ def get_connection_string():
     # setup connection string
     # to do this, please define these environment variables first
 
-    user_name = 'PSQL_USER_NAME'
-    password = 'PSQL_PASSWORD'
-    host = 'PSQL_HOST'
-    database_name = 'PSQL_DB_NAME'
+    user_name = 'cecylia'
+    password = 'password'
+    host = 'localhost'
+    database_name = 'askmate'
 
     env_variables_defined = user_name and password and host and database_name
 
