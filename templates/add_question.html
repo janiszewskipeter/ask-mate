@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
     </head>
     <body>
-    <a href="/"><h1>ೱ Ask Mate</h1></a><br>
+    <a href="/"><div class="logo">ೱ Ask Mate</div></a><br>
         <h2>Question form</h2>
         {% if edit %}
             <form action="{{ url_for("edit", question_id=question_id)}}" method="post">

@@ -13,21 +13,12 @@ and these should use generic functions from the connection.py
 '''
 
 @sql_connection.connection_handler
-def get_question_by_id(cursor: RealDictCursor, question_id: int) -> list:
+def get_question_by_id(cursor: RealDictCursor, id: int) -> list:
     cursor.execute("""
-        SELECT *
+        SELECT id, submission_time, view_number, vote_number, title, message, image
         FROM question
         WHERE id = (%s)
-        ORDER BY submission_time""", [question_id])
-    return cursor.fetchall()
-
-
-@sql_connection.connection_handler
-def get_comments(cursor: RealDictCursor) -> list:
-    cursor.execute("""
-        SELECT *
-        FROM comment
-        ORDER BY submission_time""")
+        ORDER BY submission_time""", [id])
     return cursor.fetchall()
 
 
@@ -40,63 +31,23 @@ def get_answer_by_id(cursor: RealDictCursor, id: int) -> list:
         ORDER BY submission_time""", [id])
     return cursor.fetchall()
 
-@sql_connection.connection_handler
-def get_answer_by_question_id(cursor: RealDictCursor, question_id: int) -> list:
-    cursor.execute("""
-        SELECT *
-        FROM answer
-        WHERE id = (%s)
-        ORDER BY submission_time""", [question_id])
-    return cursor.fetchall()
-
 
 @sql_connection.connection_handler
-def get_comment_by_question_id(cursor: RealDictCursor, question_id: int) -> list:
+def get_comment_by_id(cursor: RealDictCursor, id: int) -> list:
     cursor.execute("""
         SELECT *
         FROM comment
         WHERE question_id = (%s)
-        ORDER BY submission_time""", [question_id])
-    return cursor.fetchall()
-
-@sql_connection.connection_handler
-def get_comment_by_answer_id(cursor: RealDictCursor, id: int) -> list:
-    cursor.execute("""
-        SELECT *
-        FROM comment
-        WHERE answer_id = (%s)
         ORDER BY submission_time""", [id])
     return cursor.fetchall()
 
 @sql_connection.connection_handler
-def add_comment_to_qustion(cursor: RealDictCursor, question_id: int, message: str, edited_count: int ) -> list:
+def add_commnet_to_qustion(cursor: RealDictCursor, question_id: int, message: str, edited_count: int ) -> list:
     cursor.execute("""
-        INSERT INTO comment( question_id, message, submission_time, edited_count)
+        INSERT INTO comment(question_id, message, submission_time, edited_count)
         VALUES ((%s),(%s), CURRENT_TIMESTAMP, (%s))
         """, [question_id, message, edited_count])
 
-@sql_connection.connection_handler
-def add_comment_to_answer(cursor: RealDictCursor, answer_id: int, message: str, edited_count: int) -> list:
-    cursor.execute("""
-        INSERT INTO comment( answer_id, message, submission_time, edited_count)
-        VALUES ((%s),(%s), CURRENT_TIMESTAMP, (%s))
-        """, [answer_id, message, edited_count])
-
-@sql_connection.connection_handler
-def save_answer(cursor: RealDictCursor, answer: str, question_id: int) -> list:
-    cursor.execute("""
-        INSERT INTO answer( message, question_id, submission_time)
-        VALUES ((%s),(%s), CURRENT_TIMESTAMP)
-        """, [answer, question_id])
-
-@sql_connection.connection_handler
-def get_question_id_from_answer(cursor: RealDictCursor, answer_id: int) -> list:
-    cursor.execute("""
-         SELECT question_id
-         FROM answer
-         WHERE id = (%s)
-         """, [answer_id])
-    return cursor.fetchone()["question_id"]
 
 @sql_connection.connection_handler
 def get_questions(cursor: RealDictCursor) -> list:
@@ -125,15 +76,6 @@ def get_first_five_questions(cursor: RealDictCursor) -> list:
         ORDER BY submission_time DESC
         LIMIT 5;"""
     cursor.execute(query)
-    return cursor.fetchall()
-
-@sql_connection.connection_handler
-def get_question_id_from_comment(cursor: RealDictCursor, comment_id: int) -> list:
-    qcursor.execute("""
-         SELECT question_id
-         FROM comment
-         WHERE id = (%s)
-         """, [comment_id])
     return cursor.fetchall()
 
 @sql_connection.connection_handler
