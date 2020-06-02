@@ -27,32 +27,34 @@
     </div>
 <h2>Answers:</h2>
  {% for answer in answers_list %}
-     <div class="light_gray_box answers_comments">
+     <div class="light_gray_box answers">
          <h3>{{ answer.title }}</h3>
              <br>
-             <p>{{ answer.message }}</p>
-             <br>
-        <div class="light_gray_box answers_comments">
-         {% for comment in comments %}
-             {% if comment.answer_id == answer.id %}
-             <p>{{ comment.message }}</p>
-             {% endif %}
-             </div>
-         {% endfor %}
-     <form>
+                <p>{{ answer.message }}</p>
+             <form>
          <div class="button_area">
-        <button class="button small" formaction='{{ url_for('add_comment', question_id=question_id, answer_id=answer.id) }}'>Add comment</button>
+            <button class="button small" formaction='{{ url_for('add_comment', question_id=question_id, answer_id=answer.id) }}'>Add comment</button>
          </div>
      </form>
+    </div>
+      <div class="answers_comments">
+         {% for comment in comments %}
+                 {% if comment.answer_id == answer.id %}
+                   <p>{{ comment.message }}</p>
+                 {% endif %}
+         {% endfor %}
+     </div>
+
+
      </div>
  {% endfor %}
 
 <h2>Comments:</h2>
 
  {% for comment in comments %}
-     {% if comment.question_id %}
-     <div class="light_gray_box answers_comments">
-     {{ comment.message }}
+     {% if comment.question_id == question_id %}
+     <div class="light_gray_box answers">
+         <p>{{ comment.message }}</p>
      {% endif %}
      </div>
  {% endfor %}

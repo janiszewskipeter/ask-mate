@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
     </head>
     <body>
-    <a href="/"><h1>ೱ Ask Mate</h1></a><br>
+    <a href="/"><div class="logo">ೱ Ask Mate</div></a><br>
         <h2>Answer form</h2>
         <form action="{{ url_for("add_answer", question_id=question_id) }}" method="POST">
             <!-- Label for the textarea to help the user understand what it is for. -->
