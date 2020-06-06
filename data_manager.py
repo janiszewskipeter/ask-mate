@@ -125,6 +125,34 @@ def vote(cursor: RealDictCursor, votes: int, question_id: int) -> list:
              """, [votes, question_id])
 
 @sql_connection.connection_handler
+def delete_question(cursor: RealDictCursor, question_id: int) -> list:
+    cursor.execute("""
+             DELETE FROM question
+             WHERE id = (%s)
+             """, [question_id])
+
+@sql_connection.connection_handler
+def delete_answer(cursor: RealDictCursor, answer_id: int, question_id: int) -> list:
+    cursor.execute("""
+             DELETE FROM answer
+             WHERE id = (%s) and question_id = (%s)
+             """, [answer_id ,question_id])
+
+@sql_connection.connection_handler
+def delete_question_comment(cursor: RealDictCursor, question_id: int, comment_id: int) -> list:
+    cursor.execute("""
+             DELETE FROM comment
+             WHERE question_id = (%s) and id = (%s)
+             """, [question_id, comment_id])
+
+@sql_connection.connection_handler
+def delete_answer_comment(cursor: RealDictCursor, answer_id:int) -> list:
+    cursor.execute("""
+             DELETE FROM comment
+             WHERE answer_id = (%s)
+             """, [ answer_id])
+
+@sql_connection.connection_handler
 def get_vote_number(cursor: RealDictCursor, question_id: int) -> int:
     cursor.execute("""
              SELECT vote_number

@@ -26,6 +26,9 @@
         <form>
             <button class="button" formaction='{{ url_for('add_question', question_id=question_id, question=question) }}'>Edit</button>
         </form>
+           <form>
+            <button class="button" formaction='{{ url_for('delete', question_id=question_id, answer_id=-1, comment_id=-1) }}'>Delete</button>
+        </form>
         </div>
     </div>
 <h2>Answers:</h2>
@@ -37,13 +40,20 @@
              <form>
          <div class="button_area">
             <button class="button small" formaction='{{ url_for('add_comment', question_id=question_id, answer_id=answer.id) }}'>Add comment</button>
+             </form>
+         <form>
+            <button class="button" formaction='{{ url_for('delete', question_id=question_id, answer_id=answer.id, comment_id=-1) }}'>Delete</button>
+        </form>
          </div>
-     </form>
+
     </div>
       <div class="answers_comments">
          {% for comment in comments %}
                  {% if comment.answer_id == answer.id %}
                    <p>{{ comment.message }}</p>
+                     <form>
+                        <button class="button" formaction='{{ url_for('delete', question_id=question_id, answer_id=answer.id, comment_id=comment.id) }}'>Delete</button>
+                     </form>
                  {% endif %}
          {% endfor %}
      </div>
@@ -58,6 +68,9 @@
      {% if comment.question_id == question_id %}
      <div class="light_gray_box answers">
          <p>{{ comment.message }}</p>
+     <form>
+         <button class="button" formaction='{{ url_for('delete', question_id=question_id, answer_id=-1, comment_id=comment.id) }}'>Delete</button>
+     </form>
      {% endif %}
      </div>
  {% endfor %}

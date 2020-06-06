@@ -45,9 +45,28 @@ def vote(question_id):
     data_manager.vote(votes, question_id)
     return redirect(url_for('route_question', question_id=question_id))
 
+@app.route("/delete/<question_id>/<answer_id>/<comment_id>")
+def delete(question_id, answer_id, comment_id ):
+    question_id = int(question_id)
+    answer_id = int(answer_id)
+    comment_id = int(comment_id)
+    if question_id != -1 and answer_id == -1 and comment_id == -1:
+
+        data_manager.delete_question(question_id)
+        return redirect(url_for('route_question', question_id=question_id))
+    if answer_id != -1 and comment_id == -1:
+        data_manager. delete_answer(question_id, answer_id)
+        return redirect(url_for('route_question', question_id=question_id))
+    if comment_id != -1 and answer_id != -1:
+        data_manager.delete_answer_comment( answer_id )
+        return redirect(url_for('route_question', question_id=question_id))
+    if comment_id != -1 and answer_id == -1:
+        data_manager.delete_question_comment(question_id, comment_id )
+        return redirect(url_for('route_question', question_id=question_id))
+    return redirect(url_for('index'))
+
 @app.route("/add_question/<question_id>/<question>", methods=['POST', 'GET'])
 def add_question(question_id, question):
-
     if request.method == 'POST':
         title = request.form['question_title']
         message = request.form['question']
@@ -94,12 +113,6 @@ def add_comment(question_id, answer_id):
             return redirect(url_for('route_question', question_id=question_id))
 
     return render_template('add_comment.html', question_id=question_id, answer_id=answer_id)
-
-
-@app.route("/question/<question_id>/delete")
-def delete():
-    data = connection.get_data('question.csv', PATH)
-    return render_template('list.html', data=data)
 
 
 @app.route("/question/<question_id>/edit", methods=['POST', 'GET'])
