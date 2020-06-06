@@ -125,6 +125,14 @@ def vote(cursor: RealDictCursor, votes: int, question_id: int) -> list:
              """, [votes, question_id])
 
 @sql_connection.connection_handler
+def vote_answer(cursor: RealDictCursor, votes: int, question_id: int, answer_id: int) -> list:
+    cursor.execute("""
+             UPDATE answer
+             SET vote_number = (%s)
+             WHERE question_id = (%s) AND id = (%s)
+             """, [votes, question_id, answer_id])
+
+@sql_connection.connection_handler
 def search(cursor: RealDictCursor, searched_phrase: str) -> list:
     cursor.execute("""
             SELECT * FROM 
@@ -142,17 +150,17 @@ def delete_question(cursor: RealDictCursor, question_id: int) -> list:
              """, [question_id])
 
 @sql_connection.connection_handler
-def delete_answer(cursor: RealDictCursor, answer_id: int, question_id: int) -> list:
+def delete_answer(cursor: RealDictCursor,question_id: int, answer_id: int) -> list:
     cursor.execute("""
              DELETE FROM answer
-             WHERE id = (%s) and question_id = (%s)
-             """, [answer_id ,question_id])
+             WHERE question_id = (%s) AND id = (%s)
+             """, [question_id, answer_id])
 
 @sql_connection.connection_handler
 def delete_question_comment(cursor: RealDictCursor, question_id: int, comment_id: int) -> list:
     cursor.execute("""
              DELETE FROM comment
-             WHERE question_id = (%s) and id = (%s)
+             WHERE question_id = (%s) AND id = (%s)
              """, [question_id, comment_id])
 
 @sql_connection.connection_handler
@@ -169,6 +177,50 @@ def get_vote_number(cursor: RealDictCursor, question_id: int) -> int:
              FROM question
              WHERE id = (%s)
              """, [question_id])
+    return cursor.fetchone()['vote_number']
+
+@sql_connection.connection_handler
+def get_tags(cursor: RealDictCursor) -> int:
+    cursor.execute("""
+             SELECT *
+             FROM tag
+             """,)
+    return cursor.fetchall()
+
+@sql_connection.connection_handler
+def get_tags_for_question(cursor: RealDictCursor, question_id:int) -> int:
+    cursor.execute("""
+             SELECT name
+             FROM question_tag
+             JOIN tag
+             ON tag_id = id
+             WHERE id = tag_id
+             """,)
+    return cursor.fetchall()
+
+@sql_connection.connection_handler
+def add_tag_to_question(cursor: RealDictCursor, question_id, tag_id) -> int:
+    cursor.execute("""
+             INSERT INTO question_tag(question_id, tag_id )
+             VALUES ((%s),(%s))
+             """,[question_id, tag_id])
+
+@sql_connection.connection_handler
+def add_new_tag(cursor: RealDictCursor, new_tag) -> int:
+    cursor.execute("""
+             INSERT INTO tag(name)
+             VALUES (%s)
+             """,[new_tag])
+
+
+
+@sql_connection.connection_handler
+def get_vote_number_answer(cursor: RealDictCursor, question_id: int, answer_id: int) -> int:
+    cursor.execute("""
+             SELECT vote_number
+             FROM answer
+             WHERE question_id =(%s) AND id = (%s)
+             """, [question_id, answer_id])
     return cursor.fetchone()['vote_number']
 
 @sql_connection.connection_handler

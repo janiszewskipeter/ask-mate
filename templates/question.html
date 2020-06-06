@@ -15,7 +15,7 @@
         {% endfor %}
         <div class="button_area">
          <form>
-            <button class="button" formaction={{ url_for('vote', question_id=question_id) }}>{% if question[0].vote_number == None %}+ Vote{% else %}{{ question[0].vote_number }}+ Vote {% endif %} </button>
+            <button class="button" formaction={{ url_for('vote', question_id=question_id, answer_id=-1) }}>{% if question[0].vote_number == None %}+ Vote{% else %}{{ question[0].vote_number }} + Vote {% endif %} </button>
         </form>
             <form>
             <button class="button" formaction='{{ url_for('add_answer', question_id=question_id) }}'>Add an answer</button>
@@ -31,6 +31,14 @@
         </form>
         </div>
     </div>
+<div class="button_area">
+
+    <p>tags:</p>
+    <form>
+            <button class="button small" formaction='{{ url_for('add_tag', question_id=question_id) }}'>Add tag</button>
+    </form>
+
+</div>
 <h2>Answers:</h2>
  {% for answer in answers_list %}
      <div class="light_gray_box answers">
@@ -39,6 +47,9 @@
                 <p>{{ answer.message }}</p>
              <form>
          <div class="button_area">
+             <form>
+            <button class="button" formaction={{ url_for('vote', question_id=question_id, answer_id=answer.id) }}> {% if answer.vote_number == None %} + Vote{% else %}{{ answer.vote_number }}+ Vote {% endif %} </button>
+        </form>
             <button class="button small" formaction='{{ url_for('add_comment', question_id=question_id, answer_id=answer.id) }}'>Add comment</button>
              </form>
          <form>

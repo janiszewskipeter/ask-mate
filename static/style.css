@@ -130,6 +130,16 @@ input{
     background-color: #ecf0f0;
     margin-bottom: 24px
 }
+
+select{
+    border-radius: 8px;
+    font-size: medium;
+    border: white;
+    padding: 8px 16px;
+    background-color: #ecf0f0;
+    margin-bottom: 24p
+}
+
 .search_box{
     float: right
 }
