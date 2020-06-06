@@ -194,8 +194,8 @@ def get_tags_for_question(cursor: RealDictCursor, question_id:int) -> int:
              FROM question_tag
              JOIN tag
              ON tag_id = id
-             WHERE id = tag_id
-             """,)
+             WHERE question_id = (%s)
+             """,[question_id])
     return cursor.fetchall()
 
 @sql_connection.connection_handler

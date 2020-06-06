@@ -33,7 +33,10 @@
     </div>
 <div class="button_area">
 
-    <p>tags:</p>
+    <p>tags:　</p>
+    {% for tag in tags %}
+    <p>{{ tag.name  }},　</p>
+    {% endfor %}
     <form>
             <button class="button small" formaction='{{ url_for('add_tag', question_id=question_id) }}'>Add tag</button>
     </form>

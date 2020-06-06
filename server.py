@@ -35,10 +35,10 @@ def route_question(question_id):
     question = data_manager.read_a_question(int(question_id))
     answers_list = data_manager.answer_by_question_id(int(question_id))
     comments = data_manager.get_comments()
-    tags = data_manager.get_tag
+    tags = data_manager.get_tags_for_question(question_id)
 
     return render_template("question.html", comments=comments, question=question, question_id=question_id,
-                           answers_list=answers_list)
+                           answers_list=answers_list, tags=tags)
 
 
 @app.route("/vote/<question_id>/<answer_id>")
