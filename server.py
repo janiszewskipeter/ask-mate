@@ -19,11 +19,14 @@ def index():
     return render_template('index.html', questions=questions)
 
 
-@app.route("/list")
+@app.route("/list/")
 def list():
     questions = data_manager.get_questions()
     return render_template('list.html', questions=questions)
 
+# @app.route("/search/<filtered_questions>")
+# def search_result(filtered_questions):
+    return render_template('index.html', filtered_questions=filtered_questions)
 
 @app.route("/question/<question_id>")
 def route_question(question_id):
@@ -45,6 +48,13 @@ def vote(question_id):
     data_manager.vote(votes, question_id)
     return redirect(url_for('route_question', question_id=question_id))
 
+@app.route("/search", methods = ['POST', 'GET'])
+def search():
+    searched_phrase = request.form['searched_phrase']
+    filtered_questions = data_manager.search(searched_phrase)
+
+    return render_template("index.html", questions=filtered_questions )
+
 @app.route("/delete/<question_id>/<answer_id>/<comment_id>")
 def delete(question_id, answer_id, comment_id ):
     question_id = int(question_id)
@@ -65,13 +75,12 @@ def delete(question_id, answer_id, comment_id ):
         return redirect(url_for('route_question', question_id=question_id))
     return redirect(url_for('index'))
 
-@app.route("/add_question/<question_id>/<question>", methods=['POST', 'GET'])
-def add_question(question_id, question):
+@app.route("/add_question/<question_id>", methods=['POST', 'GET'])
+def add_question(question_id):
+    question_id = int(question_id)
     if request.method == 'POST':
         title = request.form['question_title']
         message = request.form['question']
-        views = 0
-        votes = 0
         if question_id == -1:
             data_manager.add_question(title, message)
         else:

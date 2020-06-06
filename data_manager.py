@@ -125,6 +125,16 @@ def vote(cursor: RealDictCursor, votes: int, question_id: int) -> list:
              """, [votes, question_id])
 
 @sql_connection.connection_handler
+def search(cursor: RealDictCursor, searched_phrase: str) -> list:
+    cursor.execute("""
+            SELECT * FROM 
+            question             
+            WHERE message LIKE (%s) OR title like (%s)
+            ORDER BY submission_time DESC
+             """, ['%'+searched_phrase+'%','%'+searched_phrase+'%'])
+    return cursor.fetchall()
+
+@sql_connection.connection_handler
 def delete_question(cursor: RealDictCursor, question_id: int) -> list:
     cursor.execute("""
              DELETE FROM question
