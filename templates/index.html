@@ -14,14 +14,14 @@
         {% for question in questions %}
         <tr>
             <td>{{ question.submission_time }}</td>
-            <td> <a href="/question/{{ question.id }}">{{ question.title }}</a> </td>
+            <td style="width:30%"><a href="/question/{{ question.id }}">{{ question.title }}</a></td>
             <td>{{ question.message }}</td>
         </tr>
         {% endfor %}
     </table>
 <div class="button_area">
 <a href="/list"><div class="button">See more</div></a>
-<a href="/add_question"><div class="button">Add question</div></a>
+<a href={{ url_for('add_question', question_id=-1, question=-1) }}><div class="button">Add question</div></a>
 </div>
 
 </body>

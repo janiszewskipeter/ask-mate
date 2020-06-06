@@ -20,14 +20,25 @@ h2{
     font-size: x-large;
 }
 
+table{
+    border-collapse: unset;
+    border-spacing: 0px;
+    -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
+}
+
 tr{
     height: 48px;
 }
 
 td{
     padding: 24px;
-    border-bottom: darkgray solid 1px;
+    border-bottom: lightgray solid 1px
 }
+
+/*td:nth-child(2){*/
+/*    border-bottom: lightgray solid 3px;*/
+/*}*/
 
 .button{
     background-color: #FF5B00;

@@ -103,19 +103,35 @@ def get_questions(cursor: RealDictCursor) -> list:
     query = """
         SELECT *
         FROM question
-        ORDER BY submission_time;"""
+        ORDER BY submission_time DESC;"""
     cursor.execute(query)
     return cursor.fetchall()
+
+# @sql_connection.connection_handler
+# def get_answers(cursor: RealDictCursor) -> list:
+#     query = """
+#         SELECT *
+#         FROM answer
+#         ORDER BY submission_time;"""
+#     cursor.execute(query)
+#     return cursor.fetchall()
 
 @sql_connection.connection_handler
-def get_answers(cursor: RealDictCursor) -> list:
-    query = """
-        SELECT *
-        FROM answer
-        ORDER BY submission_time;"""
-    cursor.execute(query)
-    return cursor.fetchall()
+def vote(cursor: RealDictCursor, votes: int, question_id: int) -> list:
+    cursor.execute("""
+             UPDATE question
+             SET vote_number = (%s)
+             WHERE id = (%s)
+             """, [votes, question_id])
 
+@sql_connection.connection_handler
+def get_vote_number(cursor: RealDictCursor, question_id: int) -> int:
+    cursor.execute("""
+             SELECT vote_number
+             FROM question
+             WHERE id = (%s)
+             """, [question_id])
+    return cursor.fetchone()['vote_number']
 
 @sql_connection.connection_handler
 def get_first_five_questions(cursor: RealDictCursor) -> list:
@@ -129,12 +145,20 @@ def get_first_five_questions(cursor: RealDictCursor) -> list:
 
 @sql_connection.connection_handler
 def get_question_id_from_comment(cursor: RealDictCursor, comment_id: int) -> list:
-    qcursor.execute("""
+    cursor.execute("""
          SELECT question_id
          FROM comment
          WHERE id = (%s)
          """, [comment_id])
     return cursor.fetchall()
+
+@sql_connection.connection_handler
+def update_question(cursor: RealDictCursor, title, message, question_id: int) -> list:
+    cursor.execute("""
+            UPDATE question
+            SET title = (%s), message = (%s)
+            WHERE id = (%s)
+            """, [title, message, question_id])
 
 @sql_connection.connection_handler
 def add_question(cursor: RealDictCursor, title: str, message: str) -> list:

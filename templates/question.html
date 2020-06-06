@@ -14,14 +14,17 @@
         <p>{{ q.message }}</p>
         {% endfor %}
         <div class="button_area">
-        <form>
+         <form>
+            <button class="button" formaction={{ url_for('vote', question_id=question_id) }}>{% if question[0].vote_number == None %}+ Vote{% else %}{{ question[0].vote_number }}+ Vote {% endif %} </button>
+        </form>
+            <form>
             <button class="button" formaction='{{ url_for('add_answer', question_id=question_id) }}'>Add an answer</button>
         </form>
         <form>
-            <button class="button" formaction='{{ url_for('edit', question_id=question_id) }}'>Edit question</button>
+            <button class="button" formaction='{{ url_for('add_comment', question_id=question_id, answer_id=-1) }}'>Add comment</button>
         </form>
         <form>
-            <button class="button" formaction='{{ url_for('add_comment', question_id=question_id, answer_id=-1) }}'>Add comment</button>
+            <button class="button" formaction='{{ url_for('add_question', question_id=question_id, question=question) }}'>Edit</button>
         </form>
         </div>
     </div>

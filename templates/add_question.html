@@ -9,20 +9,11 @@
     <body>
     <a href="/"><div class="logo">ೱ Ask Mate</div></a><br>
         <h2>Question form</h2>
-        {% if edit %}
-            <form action="{{ url_for("edit", question_id=question_id)}}" method="post">
+            <form action="{{ url_for("add_question", question_id=question_id, question=question)}}" method="post">
                 <label for="question-input">Your Question:</label><br>
-                <textarea id="question_title_input" name="question_title" rows="1" cols="60">{{ question[TITLE] }}</textarea><br>
-                <textarea id="question-input" name="question" rows="4" cols="60">{{ question[CONTENT] }}</textarea><br><br>
+                <textarea id="question_title_input" name="question_title" rows="1" cols="60" >{{ question[0].title }}</textarea><br>
+                <textarea id="question-input" name="question" rows="4" cols="60" >{{ question[0].message }}</textarea><br><br>
                 <button class="button" type="submit">Save</button>
             </form>
-        {% else %}
-            <form action="/add_question" method="post">
-                <label for="question-input">Your Question:</label><br>
-                <textarea id="question_title_input" name="question_title" rows="1" cols="60"></textarea><br>
-                <textarea id="question-input" name="question" rows="4" cols="60"></textarea><br><br>
-                <button class="button" type="submit">Save</button>
-            </form>
-            {% endif %}
     </body>
 </html>

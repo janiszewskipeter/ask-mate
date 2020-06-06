@@ -35,24 +35,32 @@ def route_question(question_id):
     return render_template("question.html", comments=comments, question=question, question_id=question_id,
                            answers_list=answers_list)
 
+@app.route("/vote/<question_id>")
+def vote(question_id):
+    votes = data_manager.get_vote_number(question_id)
+    try:
+        votes = votes + 1
+    except TypeError:
+        votes = 1
+    data_manager.vote(votes, question_id)
+    return redirect(url_for('route_question', question_id=question_id))
 
-@app.route("/add_question", methods=['POST', 'GET'])
-def add_question():
+@app.route("/add_question/<question_id>/<question>", methods=['POST', 'GET'])
+def add_question(question_id, question):
+
     if request.method == 'POST':
         title = request.form['question_title']
         message = request.form['question']
         views = 0
         votes = 0
-        data_manager.add_question(title, message)
-        question = {
-            'view_number': views,
-            'vote_number': votes,
-            'title': title,
-            'message': message,
-        }
+        if question_id == -1:
+            data_manager.add_question(title, message)
+        else:
+            data_manager.update_question(title, message, question_id)
         return redirect(url_for('list'))
 
-    return render_template('add_question.html')
+    question = data_manager.get_question_by_id(question_id)
+    return render_template('add_question.html', question_id=question_id, question=question)
 
 
 @app.route("/question/<question_id>/new-answer", methods=['POST', 'GET'])
@@ -85,14 +93,7 @@ def add_comment(question_id, answer_id):
             data_manager.add_comment_to_answer(message=message, answer_id=answer_id, edited_count=edited_count)
             return redirect(url_for('route_question', question_id=question_id))
 
-    # if answer_id == -1:
-    #     question_id = question_id
-    # else:
-    #     question_id = data_manager.get_question_id_from_answer(answer_id)
     return render_template('add_comment.html', question_id=question_id, answer_id=answer_id)
-
-
-
 
 
 @app.route("/question/<question_id>/delete")
@@ -130,7 +131,7 @@ def edit(question_id):
 
 if __name__ == "__main__":
     app.run(
-        host='0.0.0.0',
+        host='0.0.0.1',
         port=5050,
         debug=True,
     )
