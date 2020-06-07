@@ -19,10 +19,14 @@ def index():
     return render_template('index.html', questions=questions)
 
 
-@app.route("/list")
+@app.route("/list/")
 def list():
     questions = data_manager.get_questions()
     return render_template('list.html', questions=questions)
+
+    # @app.route("/search/<filtered_questions>")
+    # def search_result(filtered_questions):
+    return render_template('index.html', filtered_questions=filtered_questions)
 
 
 @app.route("/question/<question_id>")
@@ -31,34 +35,107 @@ def route_question(question_id):
     question = data_manager.read_a_question(int(question_id))
     answers_list = data_manager.answer_by_question_id(int(question_id))
     comments = data_manager.get_comments()
+    tags = data_manager.get_tags_for_question(question_id)
 
     return render_template("question.html", comments=comments, question=question, question_id=question_id,
-                           answers_list=answers_list)
+                           answers_list=answers_list, tags=tags)
 
 
-@app.route("/add_question", methods=['POST', 'GET'])
-def add_question():
+@app.route("/vote/<question_id>/<answer_id>")
+def vote(question_id, answer_id):
+    question_id = int(question_id)
+    answer_id = int(answer_id)
+    if answer_id == -1:
+        votes = data_manager.get_vote_number(question_id)
+        try:
+            votes = votes + 1
+        except TypeError:
+            votes = 1
+        data_manager.vote(votes, question_id)
+        return redirect(url_for('route_question', question_id=question_id))
+    else:
+        votes = data_manager.get_vote_number_answer(question_id, answer_id)
+        try:
+            votes = votes + 1
+        except TypeError:
+            votes = 1
+        data_manager.vote_answer(votes, question_id, answer_id)
+        return redirect(url_for('route_question', question_id=question_id))
+
+
+@app.route("/search", methods=['POST', 'GET'])
+def search():
+    searched_phrase = request.form['searched_phrase']
+    filtered_questions = data_manager.search(searched_phrase)
+
+    return render_template("index.html", questions=filtered_questions)
+
+
+@app.route("/question/<question_id>/new-tag", methods=['POST', 'GET'])
+def add_tag(question_id):
+    if request.method == 'POST':
+
+        try:
+            tag = request.form['tag']
+        except KeyError:
+            tag = None
+        try:
+            new_tag = request.form['new_tag']
+        except KeyError:
+            new_tag = None
+
+        if new_tag == None:
+            tag_id = tag
+            data_manager.add_tag_to_question(question_id, tag_id)
+            return redirect(url_for('route_question', question_id=question_id))
+        else:
+            data_manager.add_new_tag(new_tag)
+            tags = data_manager.get_tags()
+            return render_template("tags.html", question_id=question_id, tags=tags)
+
+    tags = data_manager.get_tags()
+    return render_template("tags.html", question_id=question_id, tags=tags)
+
+
+@app.route("/delete/<question_id>/<answer_id>/<comment_id>")
+def delete(question_id, answer_id, comment_id):
+    question_id = int(question_id)
+    answer_id = int(answer_id)
+    comment_id = int(comment_id)
+    if question_id != -1 and answer_id == -1 and comment_id == -1:
+        data_manager.delete_question(question_id)
+        return redirect(url_for('route_question', question_id=question_id))
+    if answer_id != -1 and comment_id == -1:
+        data_manager.delete_answer(question_id, answer_id)
+        return redirect(url_for('route_question', question_id=question_id))
+    if comment_id != -1 and answer_id != -1:
+        data_manager.delete_answer_comment(answer_id)
+        return redirect(url_for('route_question', question_id=question_id))
+    if comment_id != -1 and answer_id == -1:
+        data_manager.delete_question_comment(question_id, comment_id)
+        return redirect(url_for('route_question', question_id=question_id))
+    return redirect(url_for('index'))
+
+
+@app.route("/add_question/<question_id>", methods=['POST', 'GET'])
+def add_question(question_id):
+    question_id = int(question_id)
     if request.method == 'POST':
         title = request.form['question_title']
         message = request.form['question']
-        views = 0
-        votes = 0
-        data_manager.add_question(title, message)
-        question = {
-            'view_number': views,
-            'vote_number': votes,
-            'title': title,
-            'message': message,
-        }
+        if question_id == -1:
+            data_manager.add_question(title, message)
+        else:
+            data_manager.update_question(title, message, question_id)
         return redirect(url_for('list'))
 
-    return render_template('add_question.html')
+    question = data_manager.get_question_by_id(question_id)
+    return render_template('add_question.html', question_id=question_id, question=question)
 
 
 @app.route("/question/<question_id>/new-answer", methods=['POST', 'GET'])
 def add_answer(question_id):
     if request.method == 'POST':
-
         answer = request.form['answer']
         data_manager.save_answer(answer, question_id)
 
@@ -85,20 +162,7 @@ def add_comment(question_id, answer_id):
             data_manager.add_comment_to_answer(message=message, answer_id=answer_id, edited_count=edited_count)
             return redirect(url_for('route_question', question_id=question_id))
 
-    # if answer_id == -1:
-    #     question_id = question_id
-    # else:
-    #     question_id = data_manager.get_question_id_from_answer(answer_id)
     return render_template('add_comment.html', question_id=question_id, answer_id=answer_id)
-
-
-
-
-
-@app.route("/question/<question_id>/delete")
-def delete():
-    data = connection.get_data('question.csv', PATH)
-    return render_template('list.html', data=data)
 
 
 @app.route("/question/<question_id>/edit", methods=['POST', 'GET'])
@@ -130,9 +194,7 @@ def edit(question_id):
 
 if __name__ == "__main__":
     app.run(
-        host='0.0.0.0',
-        port=5050,
+        host='0.0.0.1',
+        port=5000,
         debug=True,
     )
-
-#id,submission_time,vote_number,question_id,message,image
