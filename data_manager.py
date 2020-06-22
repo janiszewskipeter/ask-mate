@@ -199,10 +199,28 @@ def get_tags_for_question(cursor: RealDictCursor, question_id:int) -> int:
     return cursor.fetchall()
 
 @sql_connection.connection_handler
+def get_tag_id(cursor: RealDictCursor, tag_name: str) -> int:
+    cursor.execute("""
+             SELECT tag_id
+             FROM question_tag
+             JOIN tag
+             ON tag_id = id
+             WHERE name = (%s)
+             """,[tag_name])
+    return cursor.fetchone()['tag_id']
+
+@sql_connection.connection_handler
 def add_tag_to_question(cursor: RealDictCursor, question_id, tag_id) -> int:
     cursor.execute("""
              INSERT INTO question_tag(question_id, tag_id )
              VALUES ((%s),(%s))
+             """,[question_id, tag_id])
+
+@sql_connection.connection_handler
+def delete_tag_from_question(cursor: RealDictCursor, question_id, tag_id) -> int:
+    cursor.execute("""
+             DELETE FROM question_tag
+             WHERE question_id = (%s) AND tag_id = (%s)
              """,[question_id, tag_id])
 
 @sql_connection.connection_handler

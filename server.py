@@ -71,6 +71,13 @@ def search():
     return render_template("index.html", questions=filtered_questions)
 
 
+@app.route("/question/<question_id>/<tag_name>")
+def tag_delete(question_id, tag_name):
+    tag_id = data_manager.get_tag_id(tag_name)
+    data_manager.delete_tag_from_question(question_id, tag_id)
+    return redirect(url_for('route_question', question_id=question_id))
+
+
 @app.route("/question/<question_id>/new-tag", methods=['POST', 'GET'])
 def add_tag(question_id):
     if request.method == 'POST':
