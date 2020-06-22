@@ -139,7 +139,7 @@ def add_answer(question_id):
         answer = request.form['answer']
         data_manager.save_answer(answer, question_id)
 
-        return redirect(url_for('route_question', question_id=question_id))
+        return redirect(url_for('route_question', question_id=question_id, answer=answer))
 
     answers = data_manager.get_answer_by_question_id(question_id)
     question = data_manager.get_question_by_id(question_id)
@@ -164,7 +164,7 @@ def add_comment(question_id, answer_id):
 
     return render_template('add_comment.html', question_id=question_id, answer_id=answer_id)
 
-
+'''
 @app.route("/question/<question_id>/edit", methods=['POST', 'GET'])
 def edit(question_id):
     edit = True
@@ -190,11 +190,11 @@ def edit(question_id):
 
     return render_template('add_question.html', edit=edit, question_id=question_id, question=question, TITLE=TITLE,
                            CONTENT=CONTENT)
-
+'''
 
 if __name__ == "__main__":
     app.run(
-        host='0.0.0.1',
-        port=5000,
+        host='0.0.0.0',
+        port=5050,
         debug=True,
     )

@@ -55,6 +55,9 @@
         </form>
             <button class="button small" formaction='{{ url_for('add_comment', question_id=question_id, answer_id=answer.id) }}'>Add comment</button>
              </form>
+        <form>
+            <button class="button" formaction='{{ url_for('add_answer', question_id=question_id, answer_id=-1) }}'>Edit</button>
+        </form>
          <form>
             <button class="button" formaction='{{ url_for('delete', question_id=question_id, answer_id=answer.id, comment_id=-1) }}'>Delete</button>
         </form>
