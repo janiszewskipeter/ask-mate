@@ -1,4 +1,5 @@
 body{
+    font-family: Roboto, Arial, SansSerif;
     margin: 0 auto;
     width: 70vw;
     font-family: Roboto;
@@ -136,6 +137,7 @@ td{
 }
 
 textarea {
+    font-family: Roboto;
     border-radius: 8px;
     font-size: medium;
     border: white;
@@ -145,6 +147,7 @@ textarea {
 }
 
 input{
+    font-family: Roboto;
     border-radius: 8px;
     font-size: medium;
     border: white;

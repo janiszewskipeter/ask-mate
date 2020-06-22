@@ -230,6 +230,30 @@ def add_new_tag(cursor: RealDictCursor, new_tag) -> int:
              VALUES (%s)
              """,[new_tag])
 
+@sql_connection.connection_handler
+def add_user(cursor: RealDictCursor, email:str, hashed_paswword:str) -> int:
+    cursor.execute("""
+             INSERT INTO users( email, password, registration_time)
+             VALUES ((%s),(%s), CURRENT_TIMESTAMP)
+             """,[email, hashed_paswword])
+
+@sql_connection.connection_handler
+def get_user_id_from_email(cursor: RealDictCursor, email: str) -> int:
+    cursor.execute("""
+             SELECT id
+             FROM users
+             WHERE email = (%s) 
+             """, [email])
+    return cursor.fetchone()['id']
+
+@sql_connection.connection_handler
+def get_hashed_password(cursor: RealDictCursor, user_id: int) -> int:
+    cursor.execute("""
+             SELECT password
+             FROM users
+             WHERE id = (%s) 
+             """, [user_id])
+    return cursor.fetchone()['password']
 
 
 @sql_connection.connection_handler
