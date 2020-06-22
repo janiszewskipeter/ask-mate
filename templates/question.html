@@ -32,17 +32,16 @@
         </div>
     </div>
 <div class="button_area">
-
-    <p>tags:　</p>
+    <p id="tag_list">tags:　</p>
     {% for tag in tags %}
-    <p>{{ tag.name  }},　</p>
+        <div class="tag">{{ tag.name  }}　<a href="{{ url_for("tag_delete", question_id=question_id, tag_name=tag.name) }}">×</a></div>
     {% endfor %}
     <form>
             <button class="button small" formaction='{{ url_for('add_tag', question_id=question_id) }}'>Add tag</button>
     </form>
 
 </div>
-<h2>Answers:</h2>
+<h3>Answers:</h3>
  {% for answer in answers_list %}
      <div class="light_gray_box answers">
          <h3>{{ answer.title }}</h3>
@@ -64,22 +63,23 @@
          </div>
 
     </div>
-      <div class="answers_comments">
          {% for comment in comments %}
                  {% if comment.answer_id == answer.id %}
+                     <div class="answers_comments">
                    <p>{{ comment.message }}</p>
                      <form>
                         <button class="button" formaction='{{ url_for('delete', question_id=question_id, answer_id=answer.id, comment_id=comment.id) }}'>Delete</button>
                      </form>
+                     </div>
                  {% endif %}
          {% endfor %}
-     </div>
+
 
 
      </div>
  {% endfor %}
 
-<h2>Comments:</h2>
+<h3>Comments:</h3>
 
  {% for comment in comments %}
      {% if comment.question_id == question_id %}
