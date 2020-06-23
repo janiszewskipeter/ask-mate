@@ -1,10 +1,16 @@
+html{
+    font-size: 8px;
+}
+
 body{
+    font-family: Roboto, Arial, SansSerif;
     margin: 0 auto;
-    width: 70vw;
+    width: 80vw;
     font-family: Roboto;
     color: dimgray;
-    margin-top: 16px;
-    margin-bottom: 32px;
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+    font-size: 1rem;
 }
 
 a{
@@ -21,6 +27,7 @@ h2{
 }
 
 table{
+    font-size: 2rem;
     border-collapse: unset;
     border-spacing: 0px;
     -webkit-border-horizontal-spacing: 0px;
@@ -28,11 +35,11 @@ table{
 }
 
 tr{
-    height: 48px;
+    height: 6rem;
 }
 
 td{
-    padding: 24px;
+    padding: 3rem;
     border-bottom: lightgray solid 1px
 }
 
@@ -46,9 +53,9 @@ td{
     font-size: medium;
     font-weight: normal;
     color: white;
-    border-radius: 8px;
-    margin: 16px 8px;
-    padding: 8px 16px;
+    border-radius: 1rem;
+    margin: 2rem 2rem;
+    padding: 1rem 2rem;
     text-align: center;
     border: #FF5B00 solid 2px;
 }
@@ -60,7 +67,7 @@ td{
 }
 
 .small{
-    padding: 8px 16px;
+    padding: 1rem 2rem;
     border: #FF5B00 solid 2px;
     background-color: transparent;
     color: #FF5B00;
@@ -74,40 +81,41 @@ td{
 }
 
 .button:hover{
+    color: white;
     background-color: #000000;
-    border-radius: 8px;
-    border: black solid 2px;
+    border-radius: 1rem;
+    border: black solid 0.25rem;
     transition-duration: 0.4s;
     cursor: pointer;
-    box-shadow: 0px 16px 32px rgba(65, 100, 125, 0.2);
+    box-shadow: 0px 2rem 4rem rgba(65, 100, 125, 0.2);
 }
 
 .light_gray_box {
 
     background-color: #f1f5fa;
-    border-radius: 8px;
+    border-radius: 1rem;
     /*box-shadow: 0px 8px 16px rgba(65, 100, 125, 0.2);*/
-    padding: 16px 32px 24px 32px;
-    margin-bottom: 32px;
+    padding: 2rem 4rem 3rem 4rem;
+    margin-bottom: 4rem;
     width: 60%;
 }
 
 .answers{
-    margin-left: 64px;
+    margin-left: 8rem;
 }
 
 .answers_comments{
     background-color: #f1f5fa;
-    border-radius: 8px;
-    margin-left: 128px;
-    margin-bottom: 32px;
-    padding: 16px 32px 24px 32px;
-    margin-bottom: 32px;
+    border-radius: 1rem;
+    margin-left: 16rem;
+    margin-bottom: 4rem;
+    padding: 2rem 4rem 3rem 4rem;
+    margin-bottom: 4rem;
     width: 60%;
 }
 
 #tag_list{
-    line-height: 40px;
+    line-height: 5rem;
 }
 
 .tag{
@@ -115,9 +123,9 @@ td{
     font-size: medium;
     font-weight: normal;
     color: gray;
-    border-radius: 8px;
-    margin: 16px 8px;
-    padding: 8px 16px;
+    border-radius: 1rem;
+    margin: 2rem 1rem;
+    padding: 1rem 2rem;
     text-align: center;
     border: gray solid 1px;
 }
@@ -129,51 +137,58 @@ td{
 }
 
 .logo{
-    font-size: 64px;
+    font-size: 8rem;
     font-weight: bold;
     color: #FF5B00;
-    margin-top: 24px;
+    margin-top: 3rem;
 }
 
 textarea {
-    border-radius: 8px;
+    font-family: Roboto;
+    border-radius: 1rem;
     font-size: medium;
     border: white;
-    padding: 16px;
+    padding: 2rem;
     background-color: #ecf0f0;
-    margin-bottom: 24px;
+    margin-bottom: 3rem;
 }
 
 input{
-    border-radius: 8px;
+    font-family: Roboto;
+    border-radius: 1rem;
     font-size: medium;
     border: white;
-    padding: 8px 16px;
+    padding: 1rem 2rem;
     background-color: #ecf0f0;
-    margin-bottom: 24px
+    margin-bottom: 3rem;
 }
 
 select{
-    border-radius: 8px;
+    border-radius: 1rem;
     font-size: medium;
     border: white;
-    padding: 8px 16px;
+    padding: 1rem 2rem;
     background-color: #ecf0f0;
-    margin-bottom: 24p
+    margin-bottom: 3rem;
 }
 
-.search_box{
-    float: right
-}
 textarea: focus{
-    box-shadow: 0px 16px 32px rgba(65, 100, 125, 0.2);
+    box-shadow: 0px 2rem 4rem rgba(65, 100, 125, 0.2);
     outline: none;
     outline-offset:none;
 }
+.search_box{
+    display: flex;
+    justify-content: flex-end;
+}
 
+header{
+    display: inline-flex;
+    justify-content: space-between;
+}
 
 label{
     font-size: medium;
     color: dimgray;
-    line-height: 56px ;
+    line-height: 7rem ;
 }

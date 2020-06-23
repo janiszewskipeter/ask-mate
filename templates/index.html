@@ -7,30 +7,49 @@
     <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
 </head>
 <body>
-<a href="/"><div class="logo">ೱ Ask Mate</div></a>
-<form action="{{ url_for("search")}}" method="post">
-    <div class="search_box">
-        <input name="searched_phrase" placeholder="What are you looking for?" size="40"></input>
+<div class="header">
+<div class="logo">ೱ Ask Mate</div>
+<div class="button_area">
+    <a href="/">
+    </a>
+    {% if logedin == True %}
+        <a href="{{ url_for(users_list) }}">show users list </a>
+        <div class="button small"><a href={{ url_for('logout') }}>logout</a></div>
+    {% else %}
+        <div class="button small"><a href={{ url_for('register') }}>register</a></div>
+        <div class="button small"><a href={{ url_for('login') }}>login</a></div>
+    {% endif %}
+</div>
+</div>
+<div class="search_box">
+    <form action="{{ url_for("search") }}" method="post">
+        <div><input name="searched_phrase" placeholder="What are you looking for?" size="40"></input>
         <button class="button" type="submit">Search</button>
+    </form>
     </div>
-</form>
+</div>
 
-    <br>
+<br>
 
 <h2>Recently asked questions:</h2>
 <table>
-        {% for question in questions %}
+    {% for question in questions %}
         <tr>
             <td>{{ question.submission_time }}</td>
             <td style="width:30%"><a href="/question/{{ question.id }}">{{ question.title }}</a></td>
             <td>{{ question.message }}</td>
         </tr>
-        {% endfor %}
-    </table>
+    {% endfor %}
+</table>
 <div class="button_area">
 
-<a href="/list"><div class="button">See more</div></a>
-<a href={{ url_for('add_question', question_id=-1) }}><div class="button">Add question</div></a>
+    <a href="/list">
+        <div class="button">See more</div>
+    </a>
+    <a href={{ url_for('add_question', question_id=-1) }}>
+        <div class="button">Add question</div>
+    </a>
+
 </div>
 
 </body>

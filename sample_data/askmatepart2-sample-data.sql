@@ -47,6 +47,14 @@ CREATE TABLE comment (
     edited_count integer
 );
 
+DROP TABLE IF EXISTS public.users;
+CREATE TABLE users (
+    id serial NOT NULL,
+    email text,
+    password text,
+    registration_time timestamp without time zone
+);
+
 
 DROP TABLE IF EXISTS public.question_tag;
 CREATE TABLE question_tag (

@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, session, escape
 import connection
 import util
 import data_manager
+import bcrypt
 
 app = Flask(__name__)
 PATH = app.root_path
@@ -16,7 +17,11 @@ CONTENT = -2
 @app.route("/index")
 def index():
     questions = data_manager.get_first_five_questions()
-    return render_template('index.html', questions=questions)
+    if 'username' in session:
+        logedin = True
+        return render_template('index.html', logedin=logedin, questions=questions)
+    logedin = False
+    return render_template('index.html', logedin=logedin, questions=questions)
 
 
 @app.route("/list/")
@@ -39,6 +44,51 @@ def route_question(question_id):
 
     return render_template("question.html", comments=comments, question=question, question_id=question_id,
                            answers_list=answers_list, tags=tags)
+
+@app.route("/user/<user_id>",)
+def user_page(user_id):
+    if 'user_id' not in session:
+        flash('You are not logged in!')
+        return redirect(url_for('login'))
+    questions_asked = data_manager.questions_by_id(user_id)
+    answers = data_manager.answers_for_question_id(user_id)
+    comments = data_manager.comments_for_question_id(user_id)
+    print(comments)
+    users_data = data_manager.users_data()
+    return render_template("user_id.html", users=users_data, questions_asked=questions_asked, answers=answers, comments=comments)
+
+
+@app.route("/register", methods=['POST', 'GET'])
+def register():
+    if request.method == 'POST':
+        email = request.form['email']
+        plain_text_password = request.form['password']
+        hashed_password = hash_password(plain_text_password)
+        data_manager.add_user(email, hashed_password)
+        return redirect(url_for("index"))
+
+    return render_template("registration_form.html")
+
+
+@app.route("/login", methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        try:
+            user_id = data_manager.get_user_id_from_email(email)
+        except ValueError:
+            return render_template('login.html', valid=valid)
+        session['username'] = user_id
+
+        plain_text_password = request.form['password']
+        hashed_password = data_manager.get_hashed_password(user_id)
+        valid = verify_password(plain_text_password, hashed_password)
+        if valid:
+            return redirect(url_for('index'))
+        else:
+            return redirect(url_for('login', valid=valid))
+
+    return render_template('login.html')
 
 
 @app.route("/vote/<question_id>/<answer_id>")
@@ -199,9 +249,30 @@ def edit(question_id):
                            CONTENT=CONTENT)
 '''
 
+@app.route('/logout')
+def logout():
+    # remove the username from the session if it's there
+    session.pop('username', None)
+    return redirect(url_for('index', logedin=False))
+
+
+def hash_password(plain_text_password):
+    # By using bcrypt, the salt is saved into the hash itself
+    hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')
+
+
+def verify_password(plain_text_password, hashed_password):
+    hashed_bytes_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
+
+
+# Set the secret key to some random bytes. Keep this really secret!
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
 if __name__ == "__main__":
     app.run(
-        host='0.0.0.0',
+        host='127.0.0.1',
         port=5050,
         debug=True,
     )
