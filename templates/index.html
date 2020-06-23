@@ -13,7 +13,7 @@
     <a href="/">
     </a>
     {% if logedin == True %}
-        <a href="{{ url_for(users_list) }}">show users list </a>
+        <div class="button small"><a href="{{ url_for('users_list') }}">show users list </a></div>
         <div class="button small"><a href={{ url_for('logout') }}>logout</a></div>
     {% else %}
         <div class="button small"><a href={{ url_for('register') }}>register</a></div>

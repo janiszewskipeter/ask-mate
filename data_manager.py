@@ -107,6 +107,15 @@ def get_questions(cursor: RealDictCursor) -> list:
     cursor.execute(query)
     return cursor.fetchall()
 
+@sql_connection.connection_handler
+def get_users(cursor: RealDictCursor) -> list:
+    query = """
+        SELECT *
+        FROM users
+        ORDER BY registration_time DESC;"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
 # @sql_connection.connection_handler
 # def get_answers(cursor: RealDictCursor) -> list:
 #     query = """

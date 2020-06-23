@@ -23,6 +23,11 @@ def index():
     logedin = False
     return render_template('index.html', logedin=logedin, questions=questions)
 
+@app.route("/users")
+def users_list():
+    users = data_manager.get_users()
+    return render_template('users.html', users=users)
+
 
 @app.route("/list/")
 def list():
@@ -64,7 +69,8 @@ def login():
         email = request.form['email']
         try:
             user_id = data_manager.get_user_id_from_email(email)
-        except ValueError:
+        except TypeError:
+            valid=False
             return render_template('login.html', valid=valid)
         session['username'] = user_id
 
