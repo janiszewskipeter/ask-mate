@@ -23,6 +23,16 @@ def index():
     logedin = False
     return render_template('index.html', logedin=logedin, questions=questions)
 
+@app.route("/users")
+def users_list():
+    users = data_manager.get_users()
+    return render_template('users.html', users=users)
+
+@app.route("/tags")
+def tag_list():
+    tags = data_manager.get_tags_with_count()
+    return render_template('tag_list.html', tags=tags)
+
 
 @app.route("/list/")
 def list():
@@ -76,7 +86,8 @@ def login():
         email = request.form['email']
         try:
             user_id = data_manager.get_user_id_from_email(email)
-        except ValueError:
+        except TypeError:
+            valid=False
             return render_template('login.html', valid=valid)
         session['username'] = user_id
 
@@ -115,10 +126,10 @@ def vote(question_id, answer_id):
 
 @app.route("/search", methods=['POST', 'GET'])
 def search():
-    searched_phrase = request.form['searched_phrase']
+    searched_phrase = str(request.form['searched_phrase'])
     filtered_questions = data_manager.search(searched_phrase)
-
-    return render_template("index.html", questions=filtered_questions)
+    filtered_answers = data_manager.search_answer(searched_phrase)
+    return render_template("search_result.html", questions=filtered_questions, answers=filtered_answers)
 
 
 @app.route("/question/<question_id>/<tag_name>")

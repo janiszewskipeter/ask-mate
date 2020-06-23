@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+        <title>Tags</title>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
+</head>
+<body>
+<div class="header">
+<a href="/"><div class="logo">ೱ Ask Mate</div></a>
+<div class="button_area">
+    <a href="/">
+    </a>
+    {% if logedin == True %}
+        <div class="button small"><a href="{{ url_for('users_list') }}">show users list </a></div>
+        <div class="button small"><a href={{ url_for('logout') }}>logout</a></div>
+    {% else %}
+        <div class="button small"><a href={{ url_for('register') }}>register</a></div>
+        <div class="button small"><a href={{ url_for('login') }}>login</a></div>
+    {% endif %}
+</div>
+</div>
+<h1>Tags list</h1>
+<table>
+    {% for tag in tags %}
+        <tr>
+            <td>{{ tag.name }}</td>
+            <td>{{ tag.count }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

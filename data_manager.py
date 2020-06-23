@@ -117,6 +117,15 @@ def get_questions(cursor: RealDictCursor) -> list:
     cursor.execute(query)
     return cursor.fetchall()
 
+@sql_connection.connection_handler
+def get_users(cursor: RealDictCursor) -> list:
+    query = """
+        SELECT *
+        FROM users
+        ORDER BY registration_time DESC;"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
 # @sql_connection.connection_handler
 # def get_answers(cursor: RealDictCursor) -> list:
 #     query = """
@@ -145,11 +154,19 @@ def vote_answer(cursor: RealDictCursor, votes: int, question_id: int, answer_id:
 @sql_connection.connection_handler
 def search(cursor: RealDictCursor, searched_phrase: str) -> list:
     cursor.execute("""
-            SELECT * FROM 
-            question             
+            SELECT * FROM question       
             WHERE message LIKE (%s) OR title like (%s)
-            ORDER BY submission_time DESC
+            ORDER BY question.submission_time DESC
              """, ['%'+searched_phrase+'%','%'+searched_phrase+'%'])
+    return cursor.fetchall()
+
+@sql_connection.connection_handler
+def search_answer(cursor: RealDictCursor, searched_phrase: str) -> list:
+    cursor.execute("""
+            SELECT * FROM answer
+            WHERE message LIKE (%s)
+            ORDER BY submission_time DESC
+             """, ['%'+searched_phrase+'%'])
     return cursor.fetchall()
 
 @sql_connection.connection_handler
@@ -188,6 +205,16 @@ def get_vote_number(cursor: RealDictCursor, question_id: int) -> int:
              WHERE id = (%s)
              """, [question_id])
     return cursor.fetchone()['vote_number']
+
+@sql_connection.connection_handler
+def get_tags_with_count(cursor: RealDictCursor) -> int:
+    cursor.execute("""
+             SELECT tag.name AS name, COUNT(tag_id) AS count
+             FROM tag
+             JOIN question_tag qt on tag.id = qt.tag_id
+             GROUP BY tag.name
+             """,)
+    return cursor.fetchall()
 
 @sql_connection.connection_handler
 def get_tags(cursor: RealDictCursor) -> int:

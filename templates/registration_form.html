@@ -7,10 +7,24 @@
     <title>Register</title>
 </head>
 <body>
+<div class="header">
+<a href="/"><div class="logo">ೱ Ask Mate</div></a>
+<div class="button_area">
+    <a href="/">
+    </a>
+    {% if logedin == True %}
+        <div class="button small"><a href="{{ url_for('users_list') }}">show users list </a></div>
+        <div class="button small"><a href={{ url_for('logout') }}>logout</a></div>
+    {% else %}
+        <div class="button small"><a href={{ url_for('register') }}>register</a></div>
+        <div class="button small"><a href={{ url_for('login') }}>login</a></div>
+    {% endif %}
+</div>
+</div>
 <h1>Register</h1>
     <form action="{{ url_for("register" ) }}" method="POST">
-        <textarea id="email" name="email" rows="1" cols="60"></textarea>
-        <textarea id="password" name="password" rows="1" cols="60"></textarea>
+        <textarea autocomplete="off" placeholder="email" id="email" name="email" rows="1" cols="60"></textarea><br>
+        <textarea autocomplete="off" placeholder="password" id="password" name="password" rows="1" cols="60"></textarea><br><br>
         <button class="button" type="submit">Send</button>
     </form>
 </body>
