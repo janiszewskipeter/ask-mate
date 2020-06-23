@@ -189,6 +189,16 @@ def get_vote_number(cursor: RealDictCursor, question_id: int) -> int:
     return cursor.fetchone()['vote_number']
 
 @sql_connection.connection_handler
+def get_tags_with_count(cursor: RealDictCursor) -> int:
+    cursor.execute("""
+             SELECT tag.name AS name, COUNT(tag_id) AS count
+             FROM tag
+             JOIN question_tag qt on tag.id = qt.tag_id
+             GROUP BY tag.name
+             """,)
+    return cursor.fetchall()
+
+@sql_connection.connection_handler
 def get_tags(cursor: RealDictCursor) -> int:
     cursor.execute("""
              SELECT *

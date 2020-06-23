@@ -12,6 +12,7 @@
 <div class="button_area">
     <a href="/">
     </a>
+    <div class="button small"><a href={{ url_for('tag_list') }}>tag list</a></div>
     {% if logedin == True %}
         <div class="button small"><a href="{{ url_for('users_list') }}">show users list </a></div>
         <div class="button small"><a href={{ url_for('logout') }}>logout</a></div>

@@ -28,6 +28,11 @@ def users_list():
     users = data_manager.get_users()
     return render_template('users.html', users=users)
 
+@app.route("/tags")
+def tag_list():
+    tags = data_manager.get_tags_with_count()
+    return render_template('tag_list.html', tags=tags)
+
 
 @app.route("/list/")
 def list():
