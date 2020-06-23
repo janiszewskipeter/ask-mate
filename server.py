@@ -114,10 +114,10 @@ def vote(question_id, answer_id):
 
 @app.route("/search", methods=['POST', 'GET'])
 def search():
-    searched_phrase = request.form['searched_phrase']
+    searched_phrase = str(request.form['searched_phrase'])
     filtered_questions = data_manager.search(searched_phrase)
-
-    return render_template("index.html", questions=filtered_questions)
+    filtered_answers = data_manager.search_answer(searched_phrase)
+    return render_template("search_result.html", questions=filtered_questions, answers=filtered_answers)
 
 
 @app.route("/question/<question_id>/<tag_name>")

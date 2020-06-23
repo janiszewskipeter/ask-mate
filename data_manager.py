@@ -144,11 +144,19 @@ def vote_answer(cursor: RealDictCursor, votes: int, question_id: int, answer_id:
 @sql_connection.connection_handler
 def search(cursor: RealDictCursor, searched_phrase: str) -> list:
     cursor.execute("""
-            SELECT * FROM 
-            question             
+            SELECT * FROM question       
             WHERE message LIKE (%s) OR title like (%s)
-            ORDER BY submission_time DESC
+            ORDER BY question.submission_time DESC
              """, ['%'+searched_phrase+'%','%'+searched_phrase+'%'])
+    return cursor.fetchall()
+
+@sql_connection.connection_handler
+def search_answer(cursor: RealDictCursor, searched_phrase: str) -> list:
+    cursor.execute("""
+            SELECT * FROM answer
+            WHERE message LIKE (%s)
+            ORDER BY submission_time DESC
+             """, ['%'+searched_phrase+'%'])
     return cursor.fetchall()
 
 @sql_connection.connection_handler

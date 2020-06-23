@@ -8,26 +8,28 @@
 </head>
 <body>
 <div class="header">
-<a href="/"><div class="logo">ೱ Ask Mate</div></a>
-<div class="button_area">
     <a href="/">
+        <div class="logo">ೱ Ask Mate</div>
     </a>
-    <div class="button small"><a href={{ url_for('tag_list') }}>tag list</a></div>
-    {% if logedin == True %}
-        <div class="button small"><a href="{{ url_for('users_list') }}">show users list </a></div>
-        <div class="button small"><a href={{ url_for('logout') }}>logout</a></div>
-    {% else %}
-        <div class="button small"><a href={{ url_for('register') }}>register</a></div>
-        <div class="button small"><a href={{ url_for('login') }}>login</a></div>
-    {% endif %}
-</div>
+    <div class="button_area">
+        <a href="/">
+        </a>
+        <div class="button small"><a href={{ url_for('tag_list') }}>tag list</a></div>
+        {% if logedin == True %}
+            <div class="button small"><a href="{{ url_for('users_list') }}">show users list </a></div>
+            <div class="button small"><a href={{ url_for('logout') }}>logout</a></div>
+        {% else %}
+            <div class="button small"><a href={{ url_for('register') }}>register</a></div>
+            <div class="button small"><a href={{ url_for('login') }}>login</a></div>
+        {% endif %}
+    </div>
 </div>
 <div class="search_box">
     <form action="{{ url_for("search") }}" method="post">
         <div><input name="searched_phrase" placeholder="What are you looking for?" size="40"></input>
-        <button class="button" type="submit">Search</button>
+            <button class="button" type="submit">Search</button>
     </form>
-    </div>
+</div>
 </div>
 
 <br>
@@ -40,6 +42,11 @@
             <td style="width:30%"><a href="/question/{{ question.id }}">{{ question.title }}</a></td>
             <td>{{ question.message }}</td>
         </tr>
+        {% for answer in answers %}
+            {% if answer.question_id == question.id %}
+                <tr><td></td><td></td><td>⮑  {{ answer.message }}</td></tr>
+            {% endif %}
+        {% endfor %}
     {% endfor %}
 </table>
 <div class="button_area">

@@ -5,7 +5,7 @@ html{
 body{
     font-family: Roboto, Arial, SansSerif;
     margin: 0 auto;
-    width: 80vw;
+    width: 83vw;
     font-family: Roboto;
     color: dimgray;
     margin-top: 2rem;
@@ -26,12 +26,21 @@ h2{
     font-size: x-large;
 }
 
+h3{
+    font-size: 3rem;
+
+}
+
 table{
     font-size: 2rem;
     border-collapse: unset;
     border-spacing: 0px;
     -webkit-border-horizontal-spacing: 0px;
     -webkit-border-vertical-spacing: 0px;
+}
+
+p{
+    font-size: 2rem;
 }
 
 tr{
