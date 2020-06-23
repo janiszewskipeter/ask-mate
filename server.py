@@ -241,7 +241,7 @@ def edit(question_id):
 def logout():
     # remove the username from the session if it's there
     session.pop('username', None)
-    return redirect(url_for('main', logedin=False))
+    return redirect(url_for('index', logedin=False))
 
 
 def hash_password(plain_text_password):
