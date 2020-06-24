@@ -85,6 +85,7 @@
             </button>
 
         </form>
+    {% if logedin %}
         <form>
             {% if answer.id == accepted_answer_id %}
                 <div class="accepted">Accepted</div>
@@ -96,6 +97,7 @@
                 </button>
             {% endif %}
         </form>
+    {% endif %}
     </div>
 
     </div>

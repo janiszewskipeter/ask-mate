@@ -46,6 +46,10 @@ def list():
 
 @app.route("/question/<question_id>")
 def route_question(question_id):
+    if 'username' in session:
+        logedin = True
+    else:
+        logedin = False
     question_id = int(question_id)
     question = data_manager.read_a_question(int(question_id))
     answers_list = data_manager.answer_by_question_id(int(question_id))
@@ -56,7 +60,7 @@ def route_question(question_id):
     except TypeError:
         accepted_answer_id = -1
 
-    return render_template("question.html", comments=comments, question=question, question_id=question_id,
+    return render_template("question.html", logedin=logedin, comments=comments, question=question, question_id=question_id,
                            answers_list=answers_list, tags=tags, accepted_answer_id=accepted_answer_id)
 
 
