@@ -12,9 +12,13 @@ CONTENT = -2
 
 
 @app.route("/")
-@app.route("/index")
+@app.route("/index", methods=['POST', 'GET'])
 def index():
-    questions = data_manager.get_first_five_questions()
+    if request.method == 'POST':
+        sort_by = request.form['sort_by']
+    else:
+        sort_by = 'submission_time'
+    questions = data_manager.get_first_five_questions(sort_by)
     if 'username' in session:
         logedin = True
         return render_template('index.html', logedin=logedin, questions=questions)
@@ -26,7 +30,6 @@ def index():
 def users_list():
     users = data_manager.get_users()
     return render_template('users.html', users=users)
-
 
 @app.route("/tags")
 def tag_list():

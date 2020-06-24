@@ -339,13 +339,16 @@ def get_vote_number_answer(cursor: RealDictCursor, question_id: int, answer_id: 
 
 
 @sql_connection.connection_handler
-def get_first_five_questions(cursor: RealDictCursor) -> list:
-    query = """
+def get_first_five_questions(cursor: RealDictCursor, sort_by: str) -> list:
+    cursor.execute("""
         SELECT * 
         FROM question 
-        ORDER BY submission_time DESC
-        LIMIT 5;"""
-    cursor.execute(query)
+        ORDER BY 
+        CASE WHEN (%s) = ('title') THEN title END DESC,
+        CASE WHEN (%s) = ('message') THEN message END,
+        CASE WHEN (%s) = ('vote_number') THEN vote_number END,
+        CASE WHEN (%s) = ('submission_time') THEN submission_time END
+        LIMIT 5""", [sort_by, sort_by, sort_by, sort_by])
     return cursor.fetchall()
 
 
@@ -385,7 +388,6 @@ def acceptance_check(cursor: RealDictCursor, question_id: int) -> list:
             WHERE question_id = (%s) AND accepted=TRUE
             """, [question_id])
     return cursor.fetchone()['id']
-
 
 
 @sql_connection.connection_handler
@@ -474,13 +476,12 @@ def users_data(cursor: RealDictCursor) -> list:
     cursor.execute(query)
     return cursor.fetchall()
 
-
 # (SELECT COUNT(id) FROM answer
-        # JOIN users ON answer.user_id = users.id
-        # WHERE user_id = users.id) AS answers,
-        # (SELECT COUNT(id) FROM comment
-        # JOIN users ON comment.user_id = users.id
-        # WHERE user_id = users.id) AS comment,
-        # (SELECT COUNT(id) FROM question
-        # JOIN users ON question.user_id = users.id
-        # WHERE user_id = users.id) AS question,
+# JOIN users ON answer.user_id = users.id
+# WHERE user_id = users.id) AS answers,
+# (SELECT COUNT(id) FROM comment
+# JOIN users ON comment.user_id = users.id
+# WHERE user_id = users.id) AS comment,
+# (SELECT COUNT(id) FROM question
+# JOIN users ON question.user_id = users.id
+# WHERE user_id = users.id) AS question,
