@@ -55,7 +55,7 @@ def get_answer_by_question_id(cursor: RealDictCursor, question_id: int) -> list:
     cursor.execute("""
         SELECT *
         FROM answer
-        WHERE id = (%s)
+        WHERE question_id = (%s)
         ORDER BY submission_time""", [question_id])
     return cursor.fetchall()
 
@@ -328,6 +328,14 @@ def update_question(cursor: RealDictCursor, title, message, question_id: int) ->
             SET title = (%s), message = (%s)
             WHERE id = (%s)
             """, [title, message, question_id])
+
+@sql_connection.connection_handler
+def update_answer(cursor: RealDictCursor, answer: str, answer_id: int) -> list:
+    cursor.execute("""
+            UPDATE answer
+            SET message = (%s)
+            WHERE id = (%s)
+            """, [ answer, answer_id])
 
 @sql_connection.connection_handler
 def add_question(cursor: RealDictCursor, title: str, message: str) -> list:

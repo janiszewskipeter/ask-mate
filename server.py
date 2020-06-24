@@ -203,17 +203,23 @@ def add_question(question_id):
     return render_template('add_question.html', question_id=question_id, question=question)
 
 
-@app.route("/question/<question_id>/new-answer", methods=['POST', 'GET'])
-def add_answer(question_id):
+@app.route("/question/<question_id>/new-answer/<answer_id>", methods=['POST', 'GET'])
+def add_answer(question_id, answer_id):
+    question_id = int(question_id)
+    answer_id = int(answer_id)
     if request.method == 'POST':
         answer = request.form['answer']
-        data_manager.save_answer(answer, question_id)
+        if answer_id == -1:
+            data_manager.save_answer(answer, question_id)
+        else:
+            data_manager.update_answer( answer, answer_id)
+        return redirect(url_for('route_question', question_id=question_id))
 
-        return redirect(url_for('route_question', question_id=question_id, answer=answer))
-
-    answers = data_manager.get_answer_by_question_id(question_id)
-    question = data_manager.get_question_by_id(question_id)
-    return render_template('add_answer.html', question=question, question_id=question_id, )
+    try:
+        answer = data_manager.get_answer_by_id(answer_id)[0]
+    except IndexError:
+        answer = data_manager.get_answer_by_id(answer_id)
+    return render_template('add_answer.html', answer=answer, question_id=question_id, answer_id=answer_id )
 
 
 @app.route("/question/<question_id>/<answer_id>/new-comment", methods=['POST', 'GET'])
