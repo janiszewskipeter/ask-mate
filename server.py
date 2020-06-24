@@ -21,10 +21,12 @@ def index():
     logedin = False
     return render_template('index.html', logedin=logedin, questions=questions)
 
+
 @app.route("/users")
 def users_list():
     users = data_manager.get_users()
     return render_template('users.html', users=users)
+
 
 @app.route("/tags")
 def tag_list():
@@ -49,11 +51,16 @@ def route_question(question_id):
     answers_list = data_manager.answer_by_question_id(int(question_id))
     comments = data_manager.get_comments()
     tags = data_manager.get_tags_for_question(question_id)
+    try:
+        accepted_answer_id = data_manager.acceptance_check(question_id)
+    except TypeError:
+        accepted_answer_id = -1
 
     return render_template("question.html", comments=comments, question=question, question_id=question_id,
-                           answers_list=answers_list, tags=tags)
+                           answers_list=answers_list, tags=tags, accepted_answer_id=accepted_answer_id)
 
-@app.route("/user/<user_id>",)
+
+@app.route("/user/<user_id>", )
 def user_page(user_id):
     session['username'] = user_id
     '''
@@ -67,7 +74,8 @@ def user_page(user_id):
     comments = data_manager.comments_for_question_id(user_id)
     users_data = data_manager.users_data()
     print(users_data)
-    return render_template("user.html", users=users_data, questions_asked=questions_asked, answers=answers, comments=comments)
+    return render_template("user.html", users=users_data, questions_asked=questions_asked, answers=answers,
+                           comments=comments)
 
 
 @app.route("/register", methods=['POST', 'GET'])
@@ -82,6 +90,13 @@ def register():
     return render_template("registration_form.html")
 
 
+@app.route("/accept/<question_id>/<answer_id>", methods=['POST', 'GET'])
+def accept(question_id, answer_id):
+    answer_id = int(answer_id)
+    data_manager.accept_answer(answer_id)
+    return redirect(url_for('route_question', question_id=question_id))
+
+
 @app.route("/login", methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
@@ -89,7 +104,7 @@ def login():
         try:
             user_id = data_manager.get_user_id_from_email(email)
         except TypeError:
-            valid=False
+            valid = False
             return render_template('login.html', valid=valid)
         session['username'] = user_id
 
@@ -212,14 +227,14 @@ def add_answer(question_id, answer_id):
         if answer_id == -1:
             data_manager.save_answer(answer, question_id)
         else:
-            data_manager.update_answer( answer, answer_id)
+            data_manager.update_answer(answer, answer_id)
         return redirect(url_for('route_question', question_id=question_id))
 
     try:
         answer = data_manager.get_answer_by_id(answer_id)[0]
     except IndexError:
         answer = data_manager.get_answer_by_id(answer_id)
-    return render_template('add_answer.html', answer=answer, question_id=question_id, answer_id=answer_id )
+    return render_template('add_answer.html', answer=answer, question_id=question_id, answer_id=answer_id)
 
 
 @app.route("/question/<question_id>/<answer_id>/new-comment", methods=['POST', 'GET'])
@@ -240,33 +255,6 @@ def add_comment(question_id, answer_id):
 
     return render_template('add_comment.html', question_id=question_id, answer_id=answer_id)
 
-'''
-@app.route("/question/<question_id>/edit", methods=['POST', 'GET'])
-def edit(question_id):
-    edit = True
-    if request.method == 'POST':
-        id = question_id
-        # view_number = request.form[]
-        # vote_number = request.form[]
-        title = request.form['question_title']
-        message = request.form['question']
-        # image = request.form[]
-
-        questions = connection.get_data('question.csv', PATH)
-        index = questions.index([q for q in questions if q[ID] == question_id][0])
-        submission_time = questions[index][TIME]
-        questions[index] = [id, submission_time, title, message, "image"]
-
-        connection.save_edited_data(PATH, 'question.csv', questions, 'w')
-
-        return redirect(url_for('question', question_id=question_id))
-
-    questions = connection.get_data('question.csv', PATH)
-    question = [q for q in questions if q[0] == question_id][0]
-
-    return render_template('add_question.html', edit=edit, question_id=question_id, question=question, TITLE=TITLE,
-                           CONTENT=CONTENT)
-'''
 
 @app.route('/logout')
 def logout():

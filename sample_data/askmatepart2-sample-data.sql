@@ -36,7 +36,8 @@ CREATE TABLE answer (
     vote_number integer,
     question_id integer,
     message text,
-    image text
+    image text,
+    accepted bool
 );
 
 DROP TABLE IF EXISTS public.comment;

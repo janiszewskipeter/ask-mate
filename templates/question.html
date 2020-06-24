@@ -7,90 +7,132 @@
     <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
 </head>
 <body>
-<a href="/"><div class="logo">ೱ Ask Mate</div></a><br>
+<a href="/">
+    <div class="logo">ೱ Ask Mate</div>
+</a><br>
 {% for q in question %}
     <div class="light_gray_box">
-        <h2>{{ q.title }}</h2>
-        <p>{{ q.message }}</p>
-        {% endfor %}
-        <div class="button_area">
-         <form>
-            <button class="button" formaction={{ url_for('vote', question_id=question_id, answer_id=-1) }}>{% if question[0].vote_number == None %}+ Vote{% else %}{{ question[0].vote_number }} + Vote {% endif %} </button>
-        </form>
-            <form>
-            <button class="button" formaction='{{ url_for('add_answer', question_id=question_id, answer_id = -1) }}'>Add an answer</button>
-        </form>
-        <form>
-            <button class="button" formaction='{{ url_for('add_comment', question_id=question_id, answer_id=-1) }}'>Add comment</button>
-        </form>
-        <form>
-            <button class="button" formaction='{{ url_for('add_question', question_id=question_id, question=question) }}'>Edit</button>
-        </form>
-           <form>
-            <button class="button" formaction='{{ url_for('delete', question_id=question_id, answer_id=-1, comment_id=-1) }}'>Delete</button>
-        </form>
-        </div>
-    </div>
+    <h2>{{ q.title }}</h2>
+    <p>{{ q.message }}</p>
+{% endfor %}
+<div class="button_area">
+    <form>
+        <button class="button" formaction={{ url_for('vote', question_id=question_id, answer_id=-1) }}>
+            {% if question[0].vote_number == None %}+ Vote{% else %}{{ question[0].vote_number }} +
+                Vote {% endif %} </button>
+    </form>
+    <form>
+        <button class="button" formaction='{{ url_for('add_answer', question_id=question_id, answer_id = -1) }}'>Add an
+            answer
+        </button>
+    </form>
+    <form>
+        <button class="button" formaction='{{ url_for('add_comment', question_id=question_id, answer_id=-1) }}'>Add
+            comment
+        </button>
+    </form>
+    <form>
+        <button class="button" formaction='{{ url_for('add_question', question_id=question_id, question=question) }}'>
+            Edit
+        </button>
+    </form>
+    <form>
+        <button class="button"
+                formaction='{{ url_for('delete', question_id=question_id, answer_id=-1, comment_id=-1) }}'>Delete
+        </button>
+    </form>
+</div>
+</div>
 <div class="button_area">
     <p id="tag_list">tags:　</p>
     {% for tag in tags %}
-        <div class="tag">{{ tag.name  }}　<a href="{{ url_for("tag_delete", question_id=question_id, tag_name=tag.name) }}">×</a></div>
+        <div class="tag">{{ tag.name }}　<a
+                href="{{ url_for("tag_delete", question_id=question_id, tag_name=tag.name) }}">×</a></div>
     {% endfor %}
     <form>
-            <button class="button small" formaction='{{ url_for('add_tag', question_id=question_id) }}'>Add tag</button>
+        <button class="button small" formaction='{{ url_for('add_tag', question_id=question_id) }}'>Add tag</button>
     </form>
 
 </div>
 <h3>Answers:</h3>
- {% for answer in answers_list %}
-     <div class="light_gray_box answers">
-         <h3>{{ answer.title }}</h3>
-             <br>
-                <p>{{ answer.message }}</p>
-             <form>
-         <div class="button_area">
-             <form>
-            <button class="button" formaction={{ url_for('vote', question_id=question_id, answer_id=answer.id) }}> {% if answer.vote_number == None %} + Vote{% else %}{{ answer.vote_number }}+ Vote {% endif %} </button>
-        </form>
-            <button class="button small" formaction='{{ url_for('add_comment', question_id=question_id, answer_id=answer.id) }}'>Add comment</button>
-             </form>
+{% for answer in answers_list %}
+    <div class="light_gray_box answers">
+        <h3>{{ answer.title }}</h3>
+        <br>
+        <p>{{ answer.message }}</p>
         <form>
-            <button class="button" formaction='{{ url_for('add_answer', question_id=question_id, answer_id=answer.id) }}'>Edit</button>
+            <div class="button_area">
+                <form>
+                    <button class="button"
+                            formaction={{ url_for('vote', question_id=question_id, answer_id=answer.id) }}>
+                        {% if answer.vote_number == None %} + Vote{% else %}{{ answer.vote_number }}+
+                            Vote {% endif %} </button>
+                </form>
+                <button class="button small"
+                        formaction='{{ url_for('add_comment', question_id=question_id, answer_id=answer.id) }}'>Add
+                    comment
+                </button>
         </form>
-         <form>
-            <button class="button" formaction='{{ url_for('delete', question_id=question_id, answer_id=answer.id, comment_id=-1) }}'>Delete</button>
+        <form>
+            <button class="button"
+                    formaction='{{ url_for('add_answer', question_id=question_id, answer_id=answer.id) }}'>Edit
+            </button>
         </form>
-         </div>
+        <form>
+            <button class="button"
+                    formaction='{{ url_for('delete', question_id=question_id, answer_id=answer.id, comment_id=-1) }}'>
+                Delete
+            </button>
+
+        </form>
+        <form>
+            {% if answer.id == accepted_answer_id %}
+                <div class="accepted">Accepted</div>
+            {% endif %}
+            {% if accepted_answer_id != -1 %}
+            {% else %}
+                <button class="button"
+                        formaction='{{ url_for('accept', question_id=question_id, answer_id=answer.id) }}'>Accept
+                </button>
+            {% endif %}
+        </form>
+    </div>
 
     </div>
-         {% for comment in comments %}
-                 {% if comment.answer_id == answer.id %}
-                     <div class="answers_comments">
-                   <p>{{ comment.message }}</p>
-                     <form>
-                        <button class="button" formaction='{{ url_for('delete', question_id=question_id, answer_id=answer.id, comment_id=comment.id) }}'>Delete</button>
-                     </form>
-                     </div>
-                 {% endif %}
-         {% endfor %}
+    {% for comment in comments %}
+        {% if comment.answer_id == answer.id %}
+            <div class="answers_comments">
+                <p>{{ comment.message }}</p>
+                <form>
+                    <button class="button"
+                            formaction='{{ url_for('delete', question_id=question_id, answer_id=answer.id, comment_id=comment.id) }}'>
+                        Delete
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+    {% endfor %}
 
 
 
-     </div>
- {% endfor %}
+    </div>
+{% endfor %}
 
 <h3>Comments:</h3>
 
- {% for comment in comments %}
-     {% if comment.question_id == question_id %}
-     <div class="light_gray_box answers">
-         <p>{{ comment.message }}</p>
-     <form>
-         <button class="button" formaction='{{ url_for('delete', question_id=question_id, answer_id=-1, comment_id=comment.id) }}'>Delete</button>
-     </form>
-     {% endif %}
-     </div>
- {% endfor %}
+{% for comment in comments %}
+    {% if comment.question_id == question_id %}
+        <div class="light_gray_box answers">
+        <p>{{ comment.message }}</p>
+        <form>
+            <button class="button"
+                    formaction='{{ url_for('delete', question_id=question_id, answer_id=-1, comment_id=comment.id) }}'>
+                Delete
+            </button>
+        </form>
+    {% endif %}
+</div>
+{% endfor %}
 
 </body>
 </html>
