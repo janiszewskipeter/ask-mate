@@ -131,9 +131,14 @@ def get_questions(cursor: RealDictCursor) -> list:
 @sql_connection.connection_handler
 def get_users(cursor: RealDictCursor) -> list:
     query = """
-        SELECT *
+        SELECT users.id, users.email, users.registration_time,
+        COUNT(a.id), COUNT(c.id), COUNT(q.id)      
         FROM users
-        ORDER BY registration_time DESC;"""
+        LEFT JOIN answer a ON users.id = a.user_id
+        LEFT JOIN comment c on users.id = c.user_id
+        LEFT JOIN question q on users.id = q.user_id
+        GROUP BY users.id, users.email, users.registration_time
+        ORDER BY users.registration_time DESC;"""
     cursor.execute(query)
     return cursor.fetchall()
 
@@ -230,7 +235,7 @@ def get_vote_number(cursor: RealDictCursor, question_id: int) -> int:
 @sql_connection.connection_handler
 def get_tags_with_count(cursor: RealDictCursor) -> int:
     cursor.execute("""
-             SELECT tag.name AS name, COUNT(tag_id) AS count
+             SELECT tag.name, COUNT(question_id)
              FROM tag
              JOIN question_tag qt on tag.id = qt.tag_id
              GROUP BY tag.name
@@ -468,3 +473,14 @@ def users_data(cursor: RealDictCursor) -> list:
             """
     cursor.execute(query)
     return cursor.fetchall()
+
+
+# (SELECT COUNT(id) FROM answer
+        # JOIN users ON answer.user_id = users.id
+        # WHERE user_id = users.id) AS answers,
+        # (SELECT COUNT(id) FROM comment
+        # JOIN users ON comment.user_id = users.id
+        # WHERE user_id = users.id) AS comment,
+        # (SELECT COUNT(id) FROM question
+        # JOIN users ON question.user_id = users.id
+        # WHERE user_id = users.id) AS question,

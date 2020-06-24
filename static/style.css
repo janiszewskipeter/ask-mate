@@ -127,10 +127,13 @@ td {
 }
 
 #tag_list {
+    display: flex;
+    justify-content: flex-end;
     line-height: 5rem;
 }
 
 .tag {
+    width: 9rem;
     background-color: transparent;
     font-size: medium;
     font-weight: normal;
