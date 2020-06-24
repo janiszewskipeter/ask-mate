@@ -364,3 +364,38 @@ def get_new_question_id():
             max_id = i['id']
     max_id = int(max_id) + 1
     return str(max_id)
+
+@sql_connection.connection_handler
+def answers_for_question_id(cursor: RealDictCursor, user_id: int) -> list:
+    query = """
+            SELECT answer.*, question.id, question.title
+            FROM answer
+            LEFT JOIN question
+            ON answer.question_id = question.id
+            WHERE answer.user_id = %(user_id)s
+    """
+    args = {'user_id': user_id}
+    cursor.execute(query, args)
+    return cursor.fetchall()
+
+@sql_connection.connection_handler
+def comments_for_question_id(cursor: RealDictCursor, user_id: int) -> list:
+    query = """
+            SELECT comment.*, question.id, question.title
+            FROM comment
+            LEFT JOIN question
+            ON comment.question_id = question.id
+            WHERE comment.user_id = %(user_id)s AND comment.answer_id IS NULL 
+    """
+    args = {'user_id': user_id}
+    cursor.execute(query, args)
+    return cursor.fetchall()
+
+@sql_connection.connection_handler
+def users_data(cursor: RealDictCursor) -> list:
+    query = """
+        SELECT *
+        FROM users
+            """
+    cursor.execute(query)
+    return cursor.fetchall()

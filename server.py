@@ -1,6 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect, session, escape
-import connection
-import util
+from flask import Flask, render_template, request, url_for, redirect, session, escape, flash
 import data_manager
 import bcrypt
 
@@ -57,15 +55,19 @@ def route_question(question_id):
 
 @app.route("/user/<user_id>",)
 def user_page(user_id):
+    session['username'] = user_id
+    '''
     if 'user_id' not in session:
         flash('You are not logged in!')
         return redirect(url_for('login'))
+        '''
+    print(session)
     questions_asked = data_manager.questions_by_id(user_id)
     answers = data_manager.answers_for_question_id(user_id)
     comments = data_manager.comments_for_question_id(user_id)
-    print(comments)
     users_data = data_manager.users_data()
-    return render_template("user_id.html", users=users_data, questions_asked=questions_asked, answers=answers, comments=comments)
+    print(users_data)
+    return render_template("user.html", users=users_data, questions_asked=questions_asked, answers=answers, comments=comments)
 
 
 @app.route("/register", methods=['POST', 'GET'])

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ask Mate </title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
+</head>
+<body>
+<a href="/">
+    <div class="logo">ೱ Ask Mate</div>
+</a><br>
+
+{% block content %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <td><h5><b>Username</b></h5></td>
+      <td><h5><b>Registration date</b></h5></td>
+      <td><h5><b>Questions</b></h5></td>
+      <td><h5><b>Answers</b></h5></td>
+      <td><h5><b>Comments</b></h5></td>
+      <td><h5><b>Reputation</b></h5></td>
+    </tr>
+  </thead>
+  <tbody>
+        {% for user in users %}
+    <tr>
+      <td>{{ user.email }}</td>
+      <td>{{ user.id }}</td>
+      <td>{{ user.password }}</td>
+      <td>{{ user.count_answers }}</td>
+      <td>{{ user.count_comments }}</td>
+      <td>{{ user.reputation }}</td>
+    </tr>
+        {% endfor %}
+  </tbody>
+</table>
+
+<h2>Questions</h2>
+<table>
+  <thead>
+    <tr>
+      <td><h3>Title</h3></td>
+      <td><h3>Message</h3></td>
+      <td><h3>Submission Time</h3></td>
+      <td><h3>Views</h3></td>
+      <td><h3>Votes</h3></td>
+      <td><h3>Image</h3></td>
+    </tr>
+  </thead>
+  {% for question in questions_asked %}
+  <tr>
+    <td><a href="/question/{{ question.id }}"><strong>{{question.title}}</strong></a></td>
+    <td>{{question.message}}</td>
+    <td>{{question.submission_time}}</td>
+    <td>{{question.view_number}}</td>
+    <td>{{question.vote_number}}</td>
+    <td><img src="{{ question['image'] }}" height="150" alt="image from url"></td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h2>Answers</h2>
+<table>
+    <thead>
+    <tr>
+      <td><h3>Question title</h3></td>
+      <td><h3>Message</h3></td>
+      <td><h3>Submission Time</h3></td>
+      <td><h3>Votes</h3></td>
+      <td><h3>Image</h3></td>
+    </tr>
+  </thead>
+  {% for answer in answers %}
+  <tr>
+    <td><a href="/question/{{ answer.question_id }}"><strong>{{answer.title}}</strong></a></td>
+    <td>{{answer.message}}</td>
+    <td>{{answer.submission_time}}</td>
+    <td>{{answer.vote_number}}</td>
+    <td><img src="{{ answer['image'] }}" height="150" alt="image from url"></td>
+  </tr>
+  {% endfor %}
+</table>
+
+
+<h2>Comments</h2>
+<table>
+  <thead>
+    <tr>
+      <td><h3>Question title</h3></td>
+      <td><h3>Message</h3></td>
+      <td><h3>Submission Time</h3></td>
+      <td><h3>Edited count</h3></td>
+    </tr>
+  </thead>
+{% for comment in comments %}
+  <tr>
+    <td><a href="/question/{{ comment.question_id }}"><strong>{{comment.title}}</strong></a></td>
+    <td>{{comment.message}}</td>
+    <td>{{comment.submission_time}}</td>
+    <td>{{comment.edited_count}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+
+{% endblock %}
+</body>
+</html>
