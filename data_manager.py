@@ -348,6 +348,36 @@ def update_question(cursor: RealDictCursor, title, message, question_id: int) ->
             SET title = (%s), message = (%s)
             WHERE id = (%s)
             """, [title, message, question_id])
+
+
+@sql_connection.connection_handler
+def accept_answer(cursor: RealDictCursor, answer_id: int) -> list:
+    cursor.execute("""
+            UPDATE answer
+            SET accepted = True
+            WHERE id = (%s)
+            """, [answer_id])
+
+
+@sql_connection.connection_handler
+def acceptance_check(cursor: RealDictCursor, question_id: int) -> list:
+    cursor.execute("""
+            SELECT id
+            FROM answer
+            WHERE question_id = (%s) AND accepted=TRUE
+            """, [question_id])
+    return cursor.fetchone()['id']
+
+
+@sql_connection.connection_handler
+def update_answer(cursor: RealDictCursor, answer: str, answer_id: int) -> list:
+    cursor.execute("""
+            UPDATE answer
+            SET message = (%s)
+            WHERE id = (%s)
+            """, [answer, answer_id])
+
+
 @sql_connection.connection_handler
 def add_question(cursor: RealDictCursor, title: str, message: str) -> list:
     cursor.execute("""INSERT INTO question(submission_time, title, message)

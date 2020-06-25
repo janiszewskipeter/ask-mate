@@ -1,20 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>New Answer</title>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
-    </head>
-    <body>
-    <a href="/"><div class="logo">ೱ Ask Mate</div></a><br>
-        <h2>Answer form</h2>
-        <form action="{{ url_for("add_answer", question_id=question_id) }}" method="POST">
-            <!-- Label for the textarea to help the user understand what it is for. -->
-            <label for="answer-input">New answer:</label><br>
-            <textarea id="answer-input" name="answer" rows="10" cols="60"></textarea><br><br><br>
+<head>
+    <meta charset="utf-8">
+    <title>New Answer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
+</head>
+<body>
+<a href="/">
+    <div class="logo">ೱ Ask Mate</div>
+</a><br>
+<h2>Answer form</h2>
+{% if answer_id == -1 %}
+    <form action="{{ url_for("add_answer", question_id=question_id, answer_id=answer_id) }}" method="POST">
+{% else %}
+    <form action="{{ url_for("add_answer", question_id=question_id, answer_id=answer_id) }}" method="POST">
+{% endif %}
+<label for="answer-input">New answer:</label><br>
+{% if answer_id == -1 %}
+    <textarea id="answer-input" name="answer" rows="4" cols="60"></textarea><br><br>
+{% else %}
+    <textarea id="answer-input" name="answer" rows="4" cols="60">{{ answer.message }}</textarea><br><br>
+{% endif %}
 
-            <button class="button" type="submit">Save</button>
-        </form>
-    </body>
+<button class="button" type="submit">Save</button>
+</form>
+</body>
 </html>

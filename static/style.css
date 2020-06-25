@@ -1,8 +1,8 @@
-html{
+html {
     font-size: 8px;
 }
 
-body{
+body {
     font-family: Roboto, Arial, SansSerif;
     margin: 0 auto;
     width: 83vw;
@@ -13,25 +13,25 @@ body{
     font-size: 1rem;
 }
 
-a{
+a {
     text-decoration: none;
     color: #FF5B00;
 }
 
-h1{
+h1 {
     font-size: xx-large;
 }
 
-h2{
+h2 {
     font-size: x-large;
 }
 
-h3{
+h3 {
     font-size: 3rem;
 
 }
 
-table{
+table {
     font-size: 2rem;
     border-collapse: unset;
     border-spacing: 0px;
@@ -39,24 +39,33 @@ table{
     -webkit-border-vertical-spacing: 0px;
 }
 
-p{
+p {
     font-size: 2rem;
+    width: 100%;
 }
 
-tr{
+tr {
     height: 6rem;
 }
 
-td{
+td {
     padding: 3rem;
     border-bottom: lightgray solid 1px
 }
 
-/*td:nth-child(2){*/
-/*    border-bottom: lightgray solid 3px;*/
-/*}*/
+.accepted {
+    padding: 1rem 2rem;
+    font-size: 2rem;
+    border-radius: 1rem;
+    color: white;
+    font-weight: bold;
+    margin: 2rem;
+    background-color: #03ec9c;
 
-.button{
+
+}
+
+.button {
     background-color: #FF5B00;
     border: none;
     font-size: medium;
@@ -69,15 +78,9 @@ td{
     border: #FF5B00 solid 2px;
 }
 
-#search{
-
-
-
-}
-
-.small{
+.small {
     padding: 1rem 2rem;
-    border: #FF5B00 solid 2px;
+    border: #FF5B0 0 solid 2px;
     background-color: transparent;
     color: #FF5B00;
 }
@@ -89,7 +92,7 @@ td{
 
 }
 
-.button:hover{
+.button:hover {
     color: white;
     background-color: #000000;
     border-radius: 1rem;
@@ -109,11 +112,11 @@ td{
     width: 60%;
 }
 
-.answers{
+.answers {
     margin-left: 8rem;
 }
 
-.answers_comments{
+.answers_comments {
     background-color: #f1f5fa;
     border-radius: 1rem;
     margin-left: 16rem;
@@ -123,11 +126,14 @@ td{
     width: 60%;
 }
 
-#tag_list{
+#tag_list {
+    display: flex;
+    justify-content: flex-end;
     line-height: 5rem;
 }
 
-.tag{
+.tag {
+    width: 9rem;
     background-color: transparent;
     font-size: medium;
     font-weight: normal;
@@ -139,13 +145,13 @@ td{
     border: gray solid 1px;
 }
 
-.button_area{
+.button_area {
     display: flex;
     justify-content: flex-end;
 
 }
 
-.logo{
+.logo {
     font-size: 8rem;
     font-weight: bold;
     color: #FF5B00;
@@ -162,7 +168,7 @@ textarea {
     margin-bottom: 3rem;
 }
 
-input{
+input {
     font-family: Roboto;
     border-radius: 1rem;
     font-size: medium;
@@ -172,7 +178,7 @@ input{
     margin-bottom: 3rem;
 }
 
-select{
+select {
     border-radius: 1rem;
     font-size: medium;
     border: white;
@@ -181,23 +187,24 @@ select{
     margin-bottom: 3rem;
 }
 
-textarea: focus{
+textarea: focus {
     box-shadow: 0px 2rem 4rem rgba(65, 100, 125, 0.2);
     outline: none;
-    outline-offset:none;
+    outline-offset: none;
 }
-.search_box{
+
+.search_box {
     display: flex;
     justify-content: flex-end;
 }
 
-header{
+header {
     display: inline-flex;
     justify-content: space-between;
 }
 
-label{
+label {
     font-size: medium;
     color: dimgray;
-    line-height: 7rem ;
+    line-height: 7rem;
 }
