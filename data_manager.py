@@ -33,6 +33,17 @@ def questions_by_id(cursor: RealDictCursor, user_id: int) -> list:
     return cursor.fetchall()
 
 @sql_connection.connection_handler
+def get_comment_by_id(cursor: RealDictCursor, comment_id: int) -> list:
+    query = """
+            SELECT *
+            FROM comment
+            WHERE id = %(comment_id)s
+    """
+    args = {'comment_id': comment_id}
+    cursor.execute(query, args)
+    return cursor.fetchall()
+
+@sql_connection.connection_handler
 def get_comments(cursor: RealDictCursor) -> list:
     cursor.execute("""
         SELECT *
@@ -322,13 +333,21 @@ def get_question_id_from_comment(cursor: RealDictCursor, comment_id: int) -> lis
     return cursor.fetchall()
 
 @sql_connection.connection_handler
+def update_comment(cursor: RealDictCursor, message:str,  comment_id: int,) -> list:
+    cursor.execute("""
+            UPDATE comment
+            SET message = (%s)
+            WHERE id = (%s)
+            """, [message, comment_id])
+
+
+@sql_connection.connection_handler
 def update_question(cursor: RealDictCursor, title, message, question_id: int) -> list:
     cursor.execute("""
             UPDATE question
             SET title = (%s), message = (%s)
             WHERE id = (%s)
             """, [title, message, question_id])
-
 @sql_connection.connection_handler
 def add_question(cursor: RealDictCursor, title: str, message: str) -> list:
     cursor.execute("""INSERT INTO question(submission_time, title, message)

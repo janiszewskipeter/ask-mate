@@ -12,11 +12,7 @@
         <form action="{{ url_for("add_answer", question_id=question_id) }}" method="POST">
             <!-- Label for the textarea to help the user understand what it is for. -->
             <label for="answer-input">New answer:</label><br>
-            {% if answer_id == -1%}
-                <textarea id="answer-input" name="answer" rows="4" cols="60" ></textarea><br><br>
-                {% else %}
-                    <textarea id="answer-input" name="answer" rows="4" cols="60" >{{ answer[0].message }}</textarea><br><br>
-                {% endif %}
+            <textarea id="answer-input" name="answer" rows="10" cols="60"></textarea><br><br><br>
 
             <button class="button" type="submit">Save</button>
         </form>

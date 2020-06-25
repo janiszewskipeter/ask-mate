@@ -15,7 +15,7 @@ def get_connection_string():
     # setup connection string
     # to do this, please define these environment variables first
 
-
+    '''
     user_name = 'cecylia'
     password = 'password'
     host = 'localhost'
@@ -25,7 +25,7 @@ def get_connection_string():
     password = os.environ.get('PSQL_PASSWORD')
     host = os.environ.get('PSQL_HOST')
     database_name = os.environ.get('PSQL_DB_NAME')
-    '''
+
 
     env_variables_defined = user_name and password and host and database_name
 

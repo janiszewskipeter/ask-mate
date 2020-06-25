@@ -234,6 +234,18 @@ def add_comment(question_id, answer_id):
 
     return render_template('add_comment.html', question_id=question_id, answer_id=answer_id)
 
+@app.route("/question/<question_id>/<comment_id>/edit-comment", methods=['POST', 'GET'])
+def edit_comment(question_id, comment_id ):
+    if request.method == 'POST':
+        message = request.form['comment']
+        data_manager.update_comment(message,comment_id)
+        return redirect(url_for('route_question', question_id=question_id))
+
+    question = data_manager.get_question_by_id(question_id)
+    comment = data_manager.get_comment_by_id(comment_id)[0]
+    edit = True
+    return render_template('add_comment.html', question=question, question_id=question_id, comment_id=comment_id, comment=comment, edit=edit )
+
 '''
 @app.route("/question/<question_id>/edit", methods=['POST', 'GET'])
 def edit(question_id):
@@ -287,5 +299,5 @@ if __name__ == "__main__":
     app.run(
         host='127.0.0.1',
         port=5050,
-        debug=True,
+        debug=False,
     )

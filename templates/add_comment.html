@@ -7,14 +7,28 @@
     <title>Add comment</title>
 </head>
 <body>
-<a href="/"><div class="logo">ೱ Ask Mate</div></a><br>
-        <h2>Add comment</h2>
-        <form action="{{ url_for("add_comment", question_id=question_id, answer_id=answer_id ) }}" method="POST">
-            <!-- Label for the textarea to help the user understand what it is for. -->
-            <label for="answer-input">New comment:</label><br>
-            <textarea id="comment-input" name="comment" rows="10" cols="60"></textarea><br><br><br>
+<a href="/">
+    <div class="logo">ೱ Ask Mate</div>
+</a><br>
+<h2>Add comment</h2>
+{% if edit %}
+    <form action="{{ url_for("edit_comment", question_id=question_id, comment_id=comment_id ) }}" method="POST">
+{% else %}
+    <form action="{{ url_for("add_comment", question_id=question_id, answer_id=answer_id ) }}" method="POST">
 
-            <button class="button" type="submit">Send</button>
-        </form>
+{% endif %}
+<!-- Label for the textarea to help the user understand what it is for. -->
+
+
+{% if edit %}
+    <label for="comment-input">Edit comment:</label><br>
+    <textarea id="comment-input" name="comment" rows="10" cols="60">{{ comment.message }}</textarea><br><br><br>
+{% else %}
+    <label for="comment-input">New comment:</label><br>
+    <textarea id="comment-input" name="comment" rows="10" cols="60"></textarea><br><br><br>
+{% endif %}
+<button class="button" type="submit">Send</button>
+
+</form>
 </body>
 </html>
